@@ -1,7 +1,6 @@
 import 'package:clan_wealth/apis/wealth_api.dart';
 import 'package:clan_wealth/components/wealth_card.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class WealthScreen extends StatefulWidget {
   @override
