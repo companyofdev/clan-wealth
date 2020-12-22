@@ -25,6 +25,11 @@ class _MainPageState extends State<MainPage> {
         ],
       ),
       body: WealthScreen(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {},
+      ),
       bottomNavigationBar: CwBottomNavigationBar(),
     );
   }

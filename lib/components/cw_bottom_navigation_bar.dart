@@ -15,18 +15,23 @@ class CwBottomNavigationBar extends StatelessWidget {
       height: 55.0,
       child: BottomAppBar(
         color: kColor,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            IconButton(
-              icon: Icon(FontAwesomeIcons.wallet, color: Colors.white),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: Icon(FontAwesomeIcons.users, color: Colors.white),
-              onPressed: () {},
-            ),
-          ],
+        shape: CircularNotchedRectangle(),
+        notchMargin: 4.0,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                icon: Icon(FontAwesomeIcons.wallet, color: Colors.white),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: Icon(FontAwesomeIcons.users, color: Colors.white),
+                onPressed: () {},
+              ),
+            ],
+          ),
         ),
       ),
     );

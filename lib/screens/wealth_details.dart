@@ -24,7 +24,7 @@ class WealthDetailsScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(5.0)),
       child: new Text(
         // "\$20",
-        "\$" + 120.toString(),
+        "\$" + 12.toString(),
         style: TextStyle(color: Colors.white),
       ),
     );
@@ -53,13 +53,15 @@ class WealthDetailsScreen extends StatelessWidget {
           children: <Widget>[
             Expanded(flex: 1, child: levelIndicator),
             Expanded(
-                flex: 6,
-                child: Padding(
-                    padding: EdgeInsets.only(left: 10.0),
-                    child: Text(
-                      'Level A',
-                      style: TextStyle(color: Colors.white),
-                    ))),
+              flex: 5,
+              child: Padding(
+                padding: EdgeInsets.only(left: 10.0),
+                child: Text(
+                  'Level A',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
             Expanded(flex: 1, child: coursePrice)
           ],
         ),
@@ -69,14 +71,9 @@ class WealthDetailsScreen extends StatelessWidget {
     final topContent = Stack(
       children: <Widget>[
         Container(
-            padding: EdgeInsets.only(left: 10.0),
-            height: MediaQuery.of(context).size.height * 0.5,
-            decoration: new BoxDecoration(
-              image: new DecorationImage(
-                image: new AssetImage("drive-steering-wheel.jpg"),
-                fit: BoxFit.cover,
-              ),
-            )),
+          padding: EdgeInsets.only(left: 10.0),
+          height: MediaQuery.of(context).size.height * 0.5,
+        ),
         Container(
           height: MediaQuery.of(context).size.height * 0.5,
           padding: EdgeInsets.all(40.0),
