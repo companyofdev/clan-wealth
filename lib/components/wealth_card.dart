@@ -1,5 +1,6 @@
 import 'package:clan_wealth/apis/wealth_api.dart';
 import 'package:clan_wealth/colors.dart';
+import 'package:clan_wealth/screens/wealth_details.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart' show NumberFormat, DateFormat;
@@ -71,6 +72,12 @@ class WealthListTile extends StatelessWidget {
         color: Colors.white,
         size: 25.0,
       ),
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => WealthDetailsScreen(wealth: wealth)));
+      },
     );
   }
 }
