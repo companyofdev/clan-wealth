@@ -1,4 +1,3 @@
-import 'package:clan_wealth/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -14,7 +13,7 @@ class CwBottomNavigationBar extends StatelessWidget {
     return Container(
       height: 55.0,
       child: BottomAppBar(
-        color: kColor,
+        // color: kColor,
         shape: CircularNotchedRectangle(),
         notchMargin: 4.0,
         child: Padding(

@@ -1,5 +1,5 @@
-import 'package:clan_wealth/colors.dart';
 import 'package:clan_wealth/screens/wealth.dart';
+import 'package:clan_wealth/screens/wealth_insert.dart';
 import 'package:flutter/material.dart';
 
 import 'components/cw_bottom_navigation_bar.dart';
@@ -13,9 +13,9 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
+      // backgroundColor: kBackgroundColor,
       appBar: AppBar(
-        backgroundColor: kAppBarBackground,
+        // backgroundColor: kAppBarBackground,
         title: Text('Clan Wealth'),
         actions: [
           IconButton(
@@ -28,7 +28,14 @@ class _MainPageState extends State<MainPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => WealthInsertScreen(),
+            ),
+          );
+        },
       ),
       bottomNavigationBar: CwBottomNavigationBar(),
     );

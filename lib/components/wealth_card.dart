@@ -1,5 +1,4 @@
 import 'package:clan_wealth/apis/wealth_api.dart';
-import 'package:clan_wealth/colors.dart';
 import 'package:clan_wealth/screens/wealth_details.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -74,9 +73,11 @@ class WealthListTile extends StatelessWidget {
       ),
       onTap: () {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => WealthDetailsScreen(wealth: wealth)));
+          context,
+          MaterialPageRoute(
+            builder: (context) => WealthDetailsScreen(wealth: wealth),
+          ),
+        );
       },
     );
   }
@@ -114,14 +115,10 @@ class Amount extends StatelessWidget {
       children: [
         Icon(
           FontAwesomeIcons.dollarSign,
-          color: Colors.white,
           size: 14.0,
         ),
         Text(
           formatter.format(amount),
-          style: TextStyle(
-            color: Colors.white,
-          ),
         ),
       ],
     );
