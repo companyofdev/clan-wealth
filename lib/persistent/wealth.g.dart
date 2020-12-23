@@ -398,14 +398,321 @@ class $WealthsTable extends Wealths with TableInfo<$WealthsTable, Wealth> {
   }
 }
 
+class WealthHistoricalAmount extends DataClass
+    implements Insertable<WealthHistoricalAmount> {
+  final String id;
+  final String wealthId;
+  final double amount;
+  final DateTime updatedDate;
+  WealthHistoricalAmount(
+      {@required this.id,
+      @required this.wealthId,
+      @required this.amount,
+      @required this.updatedDate});
+  factory WealthHistoricalAmount.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final stringType = db.typeSystem.forDartType<String>();
+    final doubleType = db.typeSystem.forDartType<double>();
+    final dateTimeType = db.typeSystem.forDartType<DateTime>();
+    return WealthHistoricalAmount(
+      id: stringType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      wealthId: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}wealth_id']),
+      amount:
+          doubleType.mapFromDatabaseResponse(data['${effectivePrefix}amount']),
+      updatedDate: dateTimeType
+          .mapFromDatabaseResponse(data['${effectivePrefix}updated_date']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<String>(id);
+    }
+    if (!nullToAbsent || wealthId != null) {
+      map['wealth_id'] = Variable<String>(wealthId);
+    }
+    if (!nullToAbsent || amount != null) {
+      map['amount'] = Variable<double>(amount);
+    }
+    if (!nullToAbsent || updatedDate != null) {
+      map['updated_date'] = Variable<DateTime>(updatedDate);
+    }
+    return map;
+  }
+
+  WealthHistoricalAmountsCompanion toCompanion(bool nullToAbsent) {
+    return WealthHistoricalAmountsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      wealthId: wealthId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(wealthId),
+      amount:
+          amount == null && nullToAbsent ? const Value.absent() : Value(amount),
+      updatedDate: updatedDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedDate),
+    );
+  }
+
+  factory WealthHistoricalAmount.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return WealthHistoricalAmount(
+      id: serializer.fromJson<String>(json['id']),
+      wealthId: serializer.fromJson<String>(json['wealthId']),
+      amount: serializer.fromJson<double>(json['amount']),
+      updatedDate: serializer.fromJson<DateTime>(json['updatedDate']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'wealthId': serializer.toJson<String>(wealthId),
+      'amount': serializer.toJson<double>(amount),
+      'updatedDate': serializer.toJson<DateTime>(updatedDate),
+    };
+  }
+
+  WealthHistoricalAmount copyWith(
+          {String id, String wealthId, double amount, DateTime updatedDate}) =>
+      WealthHistoricalAmount(
+        id: id ?? this.id,
+        wealthId: wealthId ?? this.wealthId,
+        amount: amount ?? this.amount,
+        updatedDate: updatedDate ?? this.updatedDate,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('WealthHistoricalAmount(')
+          ..write('id: $id, ')
+          ..write('wealthId: $wealthId, ')
+          ..write('amount: $amount, ')
+          ..write('updatedDate: $updatedDate')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(id.hashCode,
+      $mrjc(wealthId.hashCode, $mrjc(amount.hashCode, updatedDate.hashCode))));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is WealthHistoricalAmount &&
+          other.id == this.id &&
+          other.wealthId == this.wealthId &&
+          other.amount == this.amount &&
+          other.updatedDate == this.updatedDate);
+}
+
+class WealthHistoricalAmountsCompanion
+    extends UpdateCompanion<WealthHistoricalAmount> {
+  final Value<String> id;
+  final Value<String> wealthId;
+  final Value<double> amount;
+  final Value<DateTime> updatedDate;
+  const WealthHistoricalAmountsCompanion({
+    this.id = const Value.absent(),
+    this.wealthId = const Value.absent(),
+    this.amount = const Value.absent(),
+    this.updatedDate = const Value.absent(),
+  });
+  WealthHistoricalAmountsCompanion.insert({
+    this.id = const Value.absent(),
+    @required String wealthId,
+    @required double amount,
+    @required DateTime updatedDate,
+  })  : wealthId = Value(wealthId),
+        amount = Value(amount),
+        updatedDate = Value(updatedDate);
+  static Insertable<WealthHistoricalAmount> custom({
+    Expression<String> id,
+    Expression<String> wealthId,
+    Expression<double> amount,
+    Expression<DateTime> updatedDate,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (wealthId != null) 'wealth_id': wealthId,
+      if (amount != null) 'amount': amount,
+      if (updatedDate != null) 'updated_date': updatedDate,
+    });
+  }
+
+  WealthHistoricalAmountsCompanion copyWith(
+      {Value<String> id,
+      Value<String> wealthId,
+      Value<double> amount,
+      Value<DateTime> updatedDate}) {
+    return WealthHistoricalAmountsCompanion(
+      id: id ?? this.id,
+      wealthId: wealthId ?? this.wealthId,
+      amount: amount ?? this.amount,
+      updatedDate: updatedDate ?? this.updatedDate,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (wealthId.present) {
+      map['wealth_id'] = Variable<String>(wealthId.value);
+    }
+    if (amount.present) {
+      map['amount'] = Variable<double>(amount.value);
+    }
+    if (updatedDate.present) {
+      map['updated_date'] = Variable<DateTime>(updatedDate.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WealthHistoricalAmountsCompanion(')
+          ..write('id: $id, ')
+          ..write('wealthId: $wealthId, ')
+          ..write('amount: $amount, ')
+          ..write('updatedDate: $updatedDate')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $WealthHistoricalAmountsTable extends WealthHistoricalAmounts
+    with TableInfo<$WealthHistoricalAmountsTable, WealthHistoricalAmount> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $WealthHistoricalAmountsTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedTextColumn _id;
+  @override
+  GeneratedTextColumn get id => _id ??= _constructId();
+  GeneratedTextColumn _constructId() {
+    return GeneratedTextColumn(
+      'id',
+      $tableName,
+      false,
+    )..clientDefault = () => _uuid.v4();
+  }
+
+  final VerificationMeta _wealthIdMeta = const VerificationMeta('wealthId');
+  GeneratedTextColumn _wealthId;
+  @override
+  GeneratedTextColumn get wealthId => _wealthId ??= _constructWealthId();
+  GeneratedTextColumn _constructWealthId() {
+    return GeneratedTextColumn(
+      'wealth_id',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _amountMeta = const VerificationMeta('amount');
+  GeneratedRealColumn _amount;
+  @override
+  GeneratedRealColumn get amount => _amount ??= _constructAmount();
+  GeneratedRealColumn _constructAmount() {
+    return GeneratedRealColumn(
+      'amount',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _updatedDateMeta =
+      const VerificationMeta('updatedDate');
+  GeneratedDateTimeColumn _updatedDate;
+  @override
+  GeneratedDateTimeColumn get updatedDate =>
+      _updatedDate ??= _constructUpdatedDate();
+  GeneratedDateTimeColumn _constructUpdatedDate() {
+    return GeneratedDateTimeColumn(
+      'updated_date',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [id, wealthId, amount, updatedDate];
+  @override
+  $WealthHistoricalAmountsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'wealth_historical_amounts';
+  @override
+  final String actualTableName = 'wealth_historical_amounts';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<WealthHistoricalAmount> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+    }
+    if (data.containsKey('wealth_id')) {
+      context.handle(_wealthIdMeta,
+          wealthId.isAcceptableOrUnknown(data['wealth_id'], _wealthIdMeta));
+    } else if (isInserting) {
+      context.missing(_wealthIdMeta);
+    }
+    if (data.containsKey('amount')) {
+      context.handle(_amountMeta,
+          amount.isAcceptableOrUnknown(data['amount'], _amountMeta));
+    } else if (isInserting) {
+      context.missing(_amountMeta);
+    }
+    if (data.containsKey('updated_date')) {
+      context.handle(
+          _updatedDateMeta,
+          updatedDate.isAcceptableOrUnknown(
+              data['updated_date'], _updatedDateMeta));
+    } else if (isInserting) {
+      context.missing(_updatedDateMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+  @override
+  WealthHistoricalAmount map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return WealthHistoricalAmount.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $WealthHistoricalAmountsTable createAlias(String alias) {
+    return $WealthHistoricalAmountsTable(_db, alias);
+  }
+}
+
 abstract class _$WealthDatabase extends GeneratedDatabase {
   _$WealthDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   $WealthsTable _wealths;
   $WealthsTable get wealths => _wealths ??= $WealthsTable(this);
+  $WealthHistoricalAmountsTable _wealthHistoricalAmounts;
+  $WealthHistoricalAmountsTable get wealthHistoricalAmounts =>
+      _wealthHistoricalAmounts ??= $WealthHistoricalAmountsTable(this);
   WealthDao _wealthDao;
   WealthDao get wealthDao => _wealthDao ??= WealthDao(this as WealthDatabase);
+  WealthHistoricalAmountDao _wealthHistoricalAmountDao;
+  WealthHistoricalAmountDao get wealthHistoricalAmountDao =>
+      _wealthHistoricalAmountDao ??=
+          WealthHistoricalAmountDao(this as WealthDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [wealths];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [wealths, wealthHistoricalAmounts];
 }

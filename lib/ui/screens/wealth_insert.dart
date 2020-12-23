@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class WealthInsertScreen extends StatefulWidget {
   @override
@@ -185,14 +186,26 @@ class _WealthInsertScreenState extends State<WealthInsertScreen> {
   }
 
   void _addWealth(BuildContext context) {
-    final wealthDao = Provider.of<WealthDao>(context);
+    final wealthDatabase = Provider.of<WealthDatabase>(context);
+    final wealthDao = wealthDatabase.wealthDao;
+    final wealthHistoricalAmountDao = wealthDatabase.wealthHistoricalAmountDao;
+    String _wealthId = Uuid().v4();
+    DateTime _updatedDate = DateTime.now();
     Wealth wealth = Wealth(
+      id: _wealthId,
       title: _title,
       description: _description,
       amount: _amount,
       iconCode: _iconData.codePoint,
-      updatedDate: DateTime.now(),
+      updatedDate: _updatedDate,
     );
     wealthDao.insertWealth(wealth);
+
+    WealthHistoricalAmount historicalAmount = WealthHistoricalAmount(
+      wealthId: _wealthId,
+      amount: _amount,
+      updatedDate: _updatedDate,
+    );
+    wealthHistoricalAmountDao.insertWealthHistoricalAmount(historicalAmount);
   }
 }

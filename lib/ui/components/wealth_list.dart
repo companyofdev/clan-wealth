@@ -15,16 +15,17 @@ class WealthList extends StatelessWidget {
   }
 
   StreamBuilder<List<Wealth>> _buildWealthList(BuildContext context) {
-    final wealthDao = Provider.of<WealthDao>(context);
+    final wealthDatabase = Provider.of<WealthDatabase>(context);
+    final wealthDao = wealthDatabase.wealthDao;
     return StreamBuilder(
       stream: wealthDao.watchAllWealths(),
       builder: (context, AsyncSnapshot<List<Wealth>> snapshot) {
-        final wealths = snapshot.data ?? List.empty();
+        final _wealths = snapshot.data ?? List.empty();
         return ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemBuilder: (_, index) {
-            final itemWealth = wealths[index];
+            final itemWealth = _wealths[index];
             return Slidable(
               actionPane: SlidableDrawerActionPane(),
               secondaryActions: [
@@ -55,7 +56,7 @@ class WealthList extends StatelessWidget {
               ),
             );
           },
-          itemCount: wealths.length,
+          itemCount: _wealths.length,
         );
       },
     );

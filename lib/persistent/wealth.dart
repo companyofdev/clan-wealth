@@ -1,4 +1,5 @@
 import 'package:clan_wealth/persistent/wealth_dao.dart';
+import 'package:clan_wealth/persistent/wealth_historical_amount_dao.dart';
 import 'package:moor/moor.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 import 'package:uuid/uuid.dart';
@@ -21,7 +22,17 @@ class Wealths extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-@UseMoor(tables: [Wealths], daos: [WealthDao])
+class WealthHistoricalAmounts extends Table {
+  TextColumn get id => text().clientDefault(() => _uuid.v4())();
+  TextColumn get wealthId => text()();
+  RealColumn get amount => real()();
+  DateTimeColumn get updatedDate => dateTime()();
+}
+
+@UseMoor(
+  tables: [Wealths, WealthHistoricalAmounts],
+  daos: [WealthDao, WealthHistoricalAmountDao],
+)
 class WealthDatabase extends _$WealthDatabase {
   WealthDatabase()
       : super(

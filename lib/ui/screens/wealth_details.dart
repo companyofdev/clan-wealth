@@ -1,4 +1,5 @@
 import 'package:clan_wealth/persistent/wealth.dart';
+import 'package:clan_wealth/ui/components/wealth_amount_list.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -18,6 +19,20 @@ class WealthDetailsScreen extends StatelessWidget {
       FontAwesomeIcons.levelUpAlt,
       color: Colors.green,
       size: 25.0,
+    );
+
+    final changeAmount = Row(
+      children: [
+        levelIndicator,
+        SizedBox(width: 1.0),
+        Text(
+          '\$10.0',
+          style: TextStyle(
+            color: Colors.green,
+            fontSize: 15.0,
+          ),
+        ),
+      ],
     );
 
     final wealthAmount = Container(
@@ -62,22 +77,8 @@ class WealthDetailsScreen extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              child: Row(
-                children: [
-                  levelIndicator,
-                  SizedBox(width: 1.0),
-                  Text(
-                    '\$10.0',
-                    style: TextStyle(
-                      color: Colors.green,
-                      fontSize: 15.0,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(child: wealthAmount)
+            changeAmount,
+            wealthAmount,
           ],
         ),
       ],
@@ -127,8 +128,14 @@ class WealthDetailsScreen extends StatelessWidget {
       padding: EdgeInsets.all(20.0),
       child: Center(
         child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             updateButton,
+            Container(
+              height: 200.0,
+              child: WealthAmountList(wealthId: wealth.id),
+            ),
           ],
         ),
       ),
