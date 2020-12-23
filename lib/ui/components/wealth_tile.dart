@@ -6,8 +6,9 @@ import 'package:intl/intl.dart';
 class WealthTile extends StatelessWidget {
   final Wealth wealth;
   final Function onTap;
+  final Function onDetailPressed;
 
-  WealthTile({this.wealth, this.onTap});
+  WealthTile({this.wealth, this.onTap, this.onDetailPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +44,18 @@ class WealthTile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Date(
-            dateTime: DateTime.now(),
+            dateTime: wealth.updatedDate,
           ),
-          Amount(amount: 120.0),
+          Amount(amount: wealth.amount),
         ],
       ),
-      trailing: Icon(
-        FontAwesomeIcons.ellipsisH,
-        color: Colors.white,
-        size: 25.0,
+      trailing: IconButton(
+        icon: Icon(
+          FontAwesomeIcons.angleRight,
+          color: Colors.white,
+        ),
+        iconSize: 25.0,
+        onPressed: onDetailPressed,
       ),
       onTap: onTap,
     );

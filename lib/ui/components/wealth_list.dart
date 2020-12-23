@@ -2,6 +2,8 @@ import 'package:clan_wealth/persistent/wealth.dart';
 import 'package:clan_wealth/ui/components/wealth_card.dart';
 import 'package:clan_wealth/ui/screens/wealth_details.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class WealthList extends StatelessWidget {
@@ -23,17 +25,34 @@ class WealthList extends StatelessWidget {
           shrinkWrap: true,
           itemBuilder: (_, index) {
             final itemWealth = wealths[index];
-            return WealthCard(
-              wealth: itemWealth,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        WealthDetailsScreen(wealth: itemWealth),
+            return Slidable(
+              actionPane: SlidableDrawerActionPane(),
+              secondaryActions: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6.0),
+                  child: IconSlideAction(
+                    caption: 'Delete',
+                    color: Colors.red,
+                    icon: Icons.delete,
+                    onTap: () {
+                      wealthDatabase.deleteWealth(itemWealth);
+                    },
                   ),
-                );
-              },
+                ),
+              ],
+              child: WealthCard(
+                wealth: itemWealth,
+                onDetailPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          WealthDetailsScreen(wealth: itemWealth),
+                    ),
+                  );
+                },
+                onTap: () {},
+              ),
             );
           },
           itemCount: wealths.length,

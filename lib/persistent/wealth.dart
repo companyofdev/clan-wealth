@@ -12,20 +12,15 @@ class Wealths extends Table {
   TextColumn get id => text().clientDefault(() => _uuid.v4())();
   TextColumn get title => text().withLength(min: 1, max: 50)();
   TextColumn get description => text().nullable()();
+  RealColumn get amount => real()();
+  DateTimeColumn get updatedDate => dateTime()();
   IntColumn get iconCode => integer().nullable()();
 
   @override
   Set<Column> get primaryKey => {id};
 }
 
-class WealthValues extends Table {
-  TextColumn get id => text().clientDefault(() => _uuid.v4())();
-  TextColumn get wealthId => text()();
-  RealColumn get amount => real().nullable()();
-  DateTimeColumn get updatedDate => dateTime()();
-}
-
-@UseMoor(tables: [Wealths, WealthValues])
+@UseMoor(tables: [Wealths])
 class WealthDatabase extends _$WealthDatabase {
   WealthDatabase()
       : super(

@@ -1,7 +1,9 @@
 import 'package:clan_wealth/persistent/wealth.dart';
+import 'package:clan_wealth/ui/validator/double_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:provider/provider.dart';
 
 class WealthInsertScreen extends StatefulWidget {
@@ -16,6 +18,7 @@ class _WealthInsertScreenState extends State<WealthInsertScreen> {
 
   String _title;
   String _description;
+  double _amount;
   IconData _iconData = FontAwesomeIcons.landmark;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -40,6 +43,7 @@ class _WealthInsertScreenState extends State<WealthInsertScreen> {
                     children: [
                       _buildTitleField(),
                       _buildDescriptionField(),
+                      _buildAmountField(),
                       _buildIconField(),
                       SizedBox(height: 20.0),
                       ButtonBar(
@@ -118,12 +122,7 @@ class _WealthInsertScreenState extends State<WealthInsertScreen> {
 
   Widget _buildTitleField() {
     return TextFormField(
-      validator: (String value) {
-        if (value.isEmpty) {
-          return 'Title is required';
-        }
-        return null;
-      },
+      validator: RequiredValidator(errorText: 'Title is required'),
       onSaved: (String value) {
         _title = value;
       },
@@ -165,12 +164,33 @@ class _WealthInsertScreenState extends State<WealthInsertScreen> {
     );
   }
 
+  Widget _buildAmountField() {
+    return TextFormField(
+      validator: MultiValidator([
+        RequiredValidator(errorText: 'Amount is required'),
+        DoubleValidator(errorText: 'Amount is invalid'),
+      ]),
+      onSaved: (String value) {
+        _amount = double.parse(value);
+      },
+      decoration: InputDecoration(
+        labelText: 'Initial Amount',
+      ),
+      keyboardType: TextInputType.numberWithOptions(
+        decimal: true,
+        signed: false,
+      ),
+    );
+  }
+
   void _addWealth(BuildContext context) {
     final wealthDatabase = Provider.of<WealthDatabase>(context);
     Wealth wealth = Wealth(
       title: _title,
       description: _description,
+      amount: _amount,
       iconCode: _iconData.codePoint,
+      updatedDate: DateTime.now(),
     );
     wealthDatabase.insertWealth(wealth);
   }
