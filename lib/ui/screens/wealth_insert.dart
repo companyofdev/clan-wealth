@@ -1,4 +1,5 @@
 import 'package:clan_wealth/persistent/wealth.dart';
+import 'package:clan_wealth/persistent/wealth_dao.dart';
 import 'package:clan_wealth/ui/validator/double_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -184,7 +185,7 @@ class _WealthInsertScreenState extends State<WealthInsertScreen> {
   }
 
   void _addWealth(BuildContext context) {
-    final wealthDatabase = Provider.of<WealthDatabase>(context);
+    final wealthDao = Provider.of<WealthDao>(context);
     Wealth wealth = Wealth(
       title: _title,
       description: _description,
@@ -192,6 +193,6 @@ class _WealthInsertScreenState extends State<WealthInsertScreen> {
       iconCode: _iconData.codePoint,
       updatedDate: DateTime.now(),
     );
-    wealthDatabase.insertWealth(wealth);
+    wealthDao.insertWealth(wealth);
   }
 }

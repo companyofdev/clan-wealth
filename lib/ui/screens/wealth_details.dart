@@ -1,68 +1,83 @@
 import 'package:clan_wealth/persistent/wealth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 
 class WealthDetailsScreen extends StatelessWidget {
   final Wealth wealth;
 
-  const WealthDetailsScreen({this.wealth});
+  WealthDetailsScreen({this.wealth});
+
+  final DateFormat _dateFormat = DateFormat.yMd('en_US');
+  final NumberFormat _numberFormat =
+      NumberFormat.currency(symbol: '', decimalDigits: 1);
 
   @override
   Widget build(BuildContext context) {
-    final levelIndicator = Container(
-      child: Container(
-        child: LinearProgressIndicator(
-            backgroundColor: Color.fromRGBO(209, 224, 224, 0.2),
-            value: 12,
-            valueColor: AlwaysStoppedAnimation(Colors.green)),
-      ),
+    final levelIndicator = Icon(
+      FontAwesomeIcons.levelUpAlt,
+      color: Colors.green,
+      size: 25.0,
     );
 
-    final coursePrice = Container(
-      padding: const EdgeInsets.all(7.0),
-      decoration: new BoxDecoration(
-          border: new Border.all(color: Colors.white),
+    final wealthAmount = Container(
+      padding: const EdgeInsets.all(15.0),
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.white),
           borderRadius: BorderRadius.circular(5.0)),
-      child: new Text(
-        // "\$20",
-        "\$" + 12.toString(),
-        style: TextStyle(color: Colors.white),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(FontAwesomeIcons.dollarSign, size: 14.0),
+          Text(
+            _numberFormat.format(wealth.amount),
+            style: TextStyle(fontSize: 20.0),
+          ),
+        ],
       ),
     );
 
     final topContentText = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        SizedBox(height: 120.0),
+        SizedBox(height: 100.0),
         Icon(
-          Icons.directions_car,
+          IconDataSolid(wealth.iconCode),
           color: Colors.white,
           size: 40.0,
         ),
         Container(
           width: 90.0,
-          child: new Divider(color: Colors.green),
+          child: new Divider(
+            color: Colors.green,
+          ),
         ),
         SizedBox(height: 10.0),
         Text(
-          'Abc title',
+          wealth.title,
           style: TextStyle(color: Colors.white, fontSize: 45.0),
         ),
         SizedBox(height: 30.0),
         Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Expanded(flex: 1, child: levelIndicator),
-            Expanded(
-              flex: 5,
-              child: Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'Level A',
-                  style: TextStyle(color: Colors.white),
-                ),
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              child: Row(
+                children: [
+                  levelIndicator,
+                  SizedBox(width: 1.0),
+                  Text(
+                    '\$10.0',
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontSize: 15.0,
+                    ),
+                  ),
+                ],
               ),
             ),
-            Expanded(flex: 1, child: coursePrice)
+            Container(child: wealthAmount)
           ],
         ),
       ],
@@ -71,13 +86,7 @@ class WealthDetailsScreen extends StatelessWidget {
     final topContent = Stack(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.only(left: 10.0),
-          height: MediaQuery.of(context).size.height * 0.5,
-        ),
-        Container(
-          height: MediaQuery.of(context).size.height * 0.5,
           padding: EdgeInsets.all(40.0),
-          width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(color: Color.fromRGBO(58, 66, 86, .9)),
           child: Center(
             child: topContentText,
@@ -96,34 +105,40 @@ class WealthDetailsScreen extends StatelessWidget {
       ],
     );
 
-    final bottomContentText = Text(
-      'Content here',
-      style: TextStyle(fontSize: 18.0),
-    );
-    final readButton = Container(
+    final updateButton = Container(
         padding: EdgeInsets.symmetric(vertical: 16.0),
-        width: MediaQuery.of(context).size.width,
         child: RaisedButton(
+          padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
           onPressed: () => {},
-          color: Color.fromRGBO(58, 66, 86, 1.0),
-          child:
-              Text("TAKE THIS LESSON", style: TextStyle(color: Colors.white)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(FontAwesomeIcons.plus),
+              SizedBox(width: 15.0),
+              Text(
+                "Update Wealth Value",
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
+          ),
         ));
     final bottomContent = Container(
-      // height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      // color: Theme.of(context).primaryColor,
-      padding: EdgeInsets.all(40.0),
+      padding: EdgeInsets.all(20.0),
       child: Center(
         child: Column(
-          children: <Widget>[bottomContentText, readButton],
+          children: [
+            updateButton,
+          ],
         ),
       ),
     );
 
     return Scaffold(
-      body: Column(
-        children: [topContent, bottomContent],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [topContent, bottomContent],
+        ),
       ),
     );
   }

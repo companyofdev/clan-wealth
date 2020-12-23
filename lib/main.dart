@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provider(
-      builder: (_) => WealthDatabase(),
+      create: (_) => WealthDatabase().wealthDao,
       child: MaterialApp(
         title: 'Clan of Wealth App',
         theme: ThemeData.dark(),

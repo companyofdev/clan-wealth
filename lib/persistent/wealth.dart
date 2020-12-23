@@ -1,3 +1,4 @@
+import 'package:clan_wealth/persistent/wealth_dao.dart';
 import 'package:moor/moor.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 import 'package:uuid/uuid.dart';
@@ -20,7 +21,7 @@ class Wealths extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-@UseMoor(tables: [Wealths])
+@UseMoor(tables: [Wealths], daos: [WealthDao])
 class WealthDatabase extends _$WealthDatabase {
   WealthDatabase()
       : super(
@@ -32,10 +33,4 @@ class WealthDatabase extends _$WealthDatabase {
 
   @override
   int get schemaVersion => 1;
-
-  Future<List<Wealth>> getAllWealths() => select(wealths).get();
-  Stream<List<Wealth>> watchAllWealths() => select(wealths).watch();
-  Future insertWealth(Wealth wealth) => into(wealths).insert(wealth);
-  Future updateWealth(Wealth wealth) => update(wealths).replace(wealth);
-  Future deleteWealth(Wealth wealth) => delete(wealths).delete(wealth);
 }

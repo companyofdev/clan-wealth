@@ -18,7 +18,7 @@ class Wealth extends DataClass implements Insertable<Wealth> {
       {@required this.id,
       @required this.title,
       this.description,
-      this.amount,
+      @required this.amount,
       @required this.updatedDate,
       this.iconCode});
   factory Wealth.fromData(Map<String, dynamic> data, GeneratedDatabase db,
@@ -178,10 +178,11 @@ class WealthsCompanion extends UpdateCompanion<Wealth> {
     this.id = const Value.absent(),
     @required String title,
     this.description = const Value.absent(),
-    this.amount = const Value.absent(),
+    @required double amount,
     @required DateTime updatedDate,
     this.iconCode = const Value.absent(),
   })  : title = Value(title),
+        amount = Value(amount),
         updatedDate = Value(updatedDate);
   static Insertable<Wealth> custom({
     Expression<String> id,
@@ -303,7 +304,7 @@ class $WealthsTable extends Wealths with TableInfo<$WealthsTable, Wealth> {
     return GeneratedRealColumn(
       'amount',
       $tableName,
-      true,
+      false,
     );
   }
 
@@ -365,6 +366,8 @@ class $WealthsTable extends Wealths with TableInfo<$WealthsTable, Wealth> {
     if (data.containsKey('amount')) {
       context.handle(_amountMeta,
           amount.isAcceptableOrUnknown(data['amount'], _amountMeta));
+    } else if (isInserting) {
+      context.missing(_amountMeta);
     }
     if (data.containsKey('updated_date')) {
       context.handle(
@@ -399,6 +402,8 @@ abstract class _$WealthDatabase extends GeneratedDatabase {
   _$WealthDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   $WealthsTable _wealths;
   $WealthsTable get wealths => _wealths ??= $WealthsTable(this);
+  WealthDao _wealthDao;
+  WealthDao get wealthDao => _wealthDao ??= WealthDao(this as WealthDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override

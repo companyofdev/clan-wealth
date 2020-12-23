@@ -1,4 +1,5 @@
 import 'package:clan_wealth/persistent/wealth.dart';
+import 'package:clan_wealth/persistent/wealth_dao.dart';
 import 'package:clan_wealth/ui/components/wealth_card.dart';
 import 'package:clan_wealth/ui/screens/wealth_details.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +15,9 @@ class WealthList extends StatelessWidget {
   }
 
   StreamBuilder<List<Wealth>> _buildWealthList(BuildContext context) {
-    final wealthDatabase = Provider.of<WealthDatabase>(context);
+    final wealthDao = Provider.of<WealthDao>(context);
     return StreamBuilder(
-      stream: wealthDatabase.watchAllWealths(),
+      stream: wealthDao.watchAllWealths(),
       builder: (context, AsyncSnapshot<List<Wealth>> snapshot) {
         final wealths = snapshot.data ?? List.empty();
         return ListView.builder(
@@ -34,7 +35,7 @@ class WealthList extends StatelessWidget {
                     color: Colors.red,
                     icon: Icons.delete,
                     onTap: () {
-                      wealthDatabase.deleteWealth(itemWealth);
+                      wealthDao.deleteWealth(itemWealth);
                     },
                   ),
                 ),
