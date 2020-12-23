@@ -1,8 +1,8 @@
-import 'package:clan_wealth/apis/wealth_api.dart';
+import 'package:clan_wealth/persistent/wealth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
+import 'package:provider/provider.dart';
 
 class WealthInsertScreen extends StatefulWidget {
   @override
@@ -15,7 +15,7 @@ class _WealthInsertScreenState extends State<WealthInsertScreen> {
   bool showSearch = true;
 
   String _title;
-  double _amount;
+  String _description;
   IconData _iconData = FontAwesomeIcons.landmark;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -39,7 +39,7 @@ class _WealthInsertScreenState extends State<WealthInsertScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       _buildTitleField(),
-                      _buildAmountField(),
+                      _buildDescriptionField(),
                       _buildIconField(),
                       SizedBox(height: 20.0),
                       ButtonBar(
@@ -68,7 +68,7 @@ class _WealthInsertScreenState extends State<WealthInsertScreen> {
                                 return;
                               }
                               _formKey.currentState.save();
-                              _addWealth();
+                              _addWealth(context);
                               _formKey.currentState.reset();
                               Navigator.pop(context);
                             },
@@ -133,26 +133,13 @@ class _WealthInsertScreenState extends State<WealthInsertScreen> {
     );
   }
 
-  Widget _buildAmountField() {
+  Widget _buildDescriptionField() {
     return TextFormField(
-      validator: (String value) {
-        if (value.isEmpty) {
-          return 'Amount is required';
-        }
-        if (double.tryParse(value) == null) {
-          return 'Amount is invalid';
-        }
-        return null;
-      },
       onSaved: (String value) {
-        _amount = double.parse(value);
+        _description = value;
       },
       decoration: InputDecoration(
-        labelText: 'Amount',
-      ),
-      keyboardType: TextInputType.numberWithOptions(
-        decimal: true,
-        signed: false,
+        labelText: 'Description',
       ),
     );
   }
@@ -178,13 +165,13 @@ class _WealthInsertScreenState extends State<WealthInsertScreen> {
     );
   }
 
-  void _addWealth() {
+  void _addWealth(BuildContext context) {
+    final wealthDatabase = Provider.of<WealthDatabase>(context);
     Wealth wealth = Wealth(
       title: _title,
-      amount: _amount,
-      icon: _iconData,
-      updatedDate: DateTime.now(),
+      description: _description,
+      iconCode: _iconData.codePoint,
     );
-    addWealth(wealth);
+    wealthDatabase.insertWealth(wealth);
   }
 }

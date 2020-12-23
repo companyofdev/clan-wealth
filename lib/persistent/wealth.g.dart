@@ -583,8 +583,8 @@ class $WealthValuesTable extends WealthValues
   }
 }
 
-abstract class _$MyDatabase extends GeneratedDatabase {
-  _$MyDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
+abstract class _$WealthDatabase extends GeneratedDatabase {
+  _$WealthDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   $WealthsTable _wealths;
   $WealthsTable get wealths => _wealths ??= $WealthsTable(this);
   $WealthValuesTable _wealthValues;

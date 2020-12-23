@@ -1,24 +1,9 @@
-import 'package:clan_wealth/apis/wealth_api.dart';
-import 'package:clan_wealth/screens/wealth.dart';
-import 'package:clan_wealth/screens/wealth_insert.dart';
+import 'package:clan_wealth/ui/components/cw_bottom_navigation_bar.dart';
+import 'package:clan_wealth/ui/components/wealth_list.dart';
+import 'package:clan_wealth/ui/screens/wealth_insert.dart';
 import 'package:flutter/material.dart';
 
-import 'components/cw_bottom_navigation_bar.dart';
-
-class MainPage extends StatefulWidget {
-  @override
-  _MainPageState createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  List<Wealth> _wealths;
-
-  @override
-  void initState() {
-    _wealths = getWealths();
-    super.initState();
-  }
-
+class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,9 +18,7 @@ class _MainPageState extends State<MainPage> {
           )
         ],
       ),
-      body: WealthScreen(
-        wealths: _wealths,
-      ),
+      body: WealthList(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
@@ -45,11 +28,7 @@ class _MainPageState extends State<MainPage> {
             MaterialPageRoute(
               builder: (context) => WealthInsertScreen(),
             ),
-          ).then((value) {
-            setState(() {
-              _wealths = getWealths();
-            });
-          });
+          ).then((value) {});
         },
       ),
       bottomNavigationBar: CwBottomNavigationBar(),

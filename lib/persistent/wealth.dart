@@ -1,10 +1,6 @@
-import 'dart:io';
-
-import 'package:moor/ffi.dart';
 import 'package:moor/moor.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:moor_flutter/moor_flutter.dart';
 import 'package:uuid/uuid.dart';
-import 'package:path/path.dart' as p;
 
 // assuming that your file is called filename.dart. This will give an error at first,
 // but it's needed for moor to know about the generated code
@@ -29,34 +25,22 @@ class WealthValues extends Table {
   DateTimeColumn get updatedDate => dateTime()();
 }
 
-LazyDatabase _openConnection() {
-  // the LazyDatabase util lets us find the right location for the file async.
-  return LazyDatabase(() async {
-    // put the database file, called db.sqlite here, into the documents folder
-    // for your app.
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'clan_wealth.db.sqlite'));
-    return VmDatabase(file);
-  });
-}
-
 @UseMoor(tables: [Wealths, WealthValues])
-class MyDatabase extends _$MyDatabase {
-  MyDatabase() : super(_openConnection());
+class WealthDatabase extends _$WealthDatabase {
+  WealthDatabase()
+      : super(
+          FlutterQueryExecutor.inDatabaseFolder(
+            path: 'wealth.db.sqlite',
+            logStatements: true,
+          ),
+        );
 
   @override
   int get schemaVersion => 1;
 
-  Future<List<Wealth>> get allWealthEntries => select(wealths).get();
-
-  Future<List<WealthValue>> getAllWealthValueEntriesByWealth(Wealth wealth) {
-    return (select(wealthValues)
-          ..where((tbl) => tbl.wealthId.equals(wealth.id)))
-        .get();
-  }
-
-  Stream<List<WealthValue>> watchEntriesInWealth(Wealth wealth) {
-    return (select(wealthValues)..where((t) => t.wealthId.equals(wealth.id)))
-        .watch();
-  }
+  Future<List<Wealth>> getAllWealths() => select(wealths).get();
+  Stream<List<Wealth>> watchAllWealths() => select(wealths).watch();
+  Future insertWealth(Wealth wealth) => into(wealths).insert(wealth);
+  Future updateWealth(Wealth wealth) => update(wealths).replace(wealth);
+  Future deleteWealth(Wealth wealth) => delete(wealths).delete(wealth);
 }

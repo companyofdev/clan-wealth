@@ -1,31 +1,13 @@
-import 'package:clan_wealth/apis/wealth_api.dart';
-import 'package:clan_wealth/screens/wealth_details.dart';
+import 'package:clan_wealth/persistent/wealth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart' show NumberFormat, DateFormat;
+import 'package:intl/intl.dart';
 
-class WealthCard extends StatelessWidget {
+class WealthTile extends StatelessWidget {
   final Wealth wealth;
+  final Function onTap;
 
-  const WealthCard({this.wealth});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 8.0,
-      margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
-      child: Container(
-        decoration: BoxDecoration(color: Color.fromRGBO(64, 75, 96, .9)),
-        child: WealthListTile(wealth: wealth),
-      ),
-    );
-  }
-}
-
-class WealthListTile extends StatelessWidget {
-  final Wealth wealth;
-
-  WealthListTile({this.wealth});
+  WealthTile({this.wealth, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +27,7 @@ class WealthListTile extends StatelessWidget {
           ),
         ),
         child: Icon(
-          wealth.icon,
+          IconDataSolid(wealth.iconCode),
           color: Colors.white,
           size: 30.0,
         ),
@@ -61,9 +43,9 @@ class WealthListTile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Date(
-            dateTime: wealth.updatedDate,
+            dateTime: DateTime.now(),
           ),
-          Amount(amount: wealth.amount),
+          Amount(amount: 120.0),
         ],
       ),
       trailing: Icon(
@@ -71,14 +53,7 @@ class WealthListTile extends StatelessWidget {
         color: Colors.white,
         size: 25.0,
       ),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => WealthDetailsScreen(wealth: wealth),
-          ),
-        );
-      },
+      onTap: onTap,
     );
   }
 }

@@ -1,4 +1,4 @@
-import 'package:clan_wealth/apis/wealth_api.dart';
+import 'package:clan_wealth/persistent/wealth.dart';
 import 'package:flutter/material.dart';
 
 class WealthDetailsScreen extends StatelessWidget {
