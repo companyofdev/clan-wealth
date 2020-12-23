@@ -3,7 +3,6 @@ import 'package:clan_wealth/ui/components/wealth_card.dart';
 import 'package:clan_wealth/ui/screens/wealth_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class WealthList extends StatelessWidget {

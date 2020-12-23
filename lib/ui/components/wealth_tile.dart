@@ -10,21 +10,22 @@ class WealthTile extends StatelessWidget {
 
   WealthTile({this.wealth, this.onTap, this.onDetailPressed});
 
+  final DateFormat _dateFormat = DateFormat.yMd('en_US');
+  final NumberFormat _numberFormat =
+      NumberFormat.currency(symbol: '', decimalDigits: 1);
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(
-        horizontal: 20.0,
+        horizontal: 15.0,
         vertical: 10.0,
       ),
       leading: Container(
         padding: EdgeInsets.only(right: 12.0),
         decoration: BoxDecoration(
           border: Border(
-            right: BorderSide(
-              width: 1.0,
-              color: Colors.white24,
-            ),
+            right: BorderSide(width: 1.0, color: Colors.white24),
           ),
         ),
         child: Icon(
@@ -35,70 +36,37 @@ class WealthTile extends StatelessWidget {
       ),
       title: Text(
         wealth.title,
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
+        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       ),
       subtitle: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Date(
-            dateTime: wealth.updatedDate,
-          ),
-          Amount(amount: wealth.amount),
+          _buildUpdatedDate(),
+          _buildAmount(),
         ],
       ),
       trailing: IconButton(
-        icon: Icon(
-          FontAwesomeIcons.angleRight,
-          color: Colors.white,
-        ),
+        icon: Icon(FontAwesomeIcons.angleRight, color: Colors.white),
         iconSize: 25.0,
         onPressed: onDetailPressed,
       ),
       onTap: onTap,
     );
   }
-}
 
-class Date extends StatelessWidget {
-  final DateTime dateTime;
-  final DateFormat _dateFormat = DateFormat.yMd('en_US');
-
-  Date({@required this.dateTime});
-
-  @override
-  Widget build(BuildContext context) {
+  _buildUpdatedDate() {
     return Row(
       children: [
-        Text(
-          _dateFormat.format(dateTime),
-        ),
+        Text(_dateFormat.format(wealth.updatedDate)),
       ],
     );
   }
-}
 
-class Amount extends StatelessWidget {
-  final double amount;
-
-  Amount({@required this.amount});
-
-  final NumberFormat formatter =
-      NumberFormat.currency(symbol: '', decimalDigits: 1);
-
-  @override
-  Widget build(BuildContext context) {
+  _buildAmount() {
     return Row(
       children: [
-        Icon(
-          FontAwesomeIcons.dollarSign,
-          size: 14.0,
-        ),
-        Text(
-          formatter.format(amount),
-        ),
+        Icon(FontAwesomeIcons.dollarSign, size: 14.0),
+        Text(_numberFormat.format(wealth.amount)),
       ],
     );
   }
