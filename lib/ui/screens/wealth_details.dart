@@ -1,18 +1,121 @@
 import 'package:clan_wealth/persistent/wealth.dart';
-import 'package:clan_wealth/ui/components/wealth_amount_list.dart';
 import 'package:clan_wealth/ui/components/wealth_change_indicator.dart';
+import 'package:clan_wealth/ui/validator/double_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
-class WealthDetailsScreen extends StatelessWidget {
-  final Wealth wealth;
+class WealthDetailsScreen extends StatefulWidget {
+  final Wealth initialWealth;
 
-  WealthDetailsScreen({this.wealth});
+  WealthDetailsScreen({this.initialWealth});
 
-  final DateFormat _dateFormat = DateFormat.yMd('en_US');
+  @override
+  _WealthDetailsScreenState createState() => _WealthDetailsScreenState();
+}
+
+class _WealthDetailsScreenState extends State<WealthDetailsScreen> {
+  Wealth _wealth;
+
   final NumberFormat _numberFormat =
       NumberFormat.currency(symbol: '', decimalDigits: 1);
+
+  @override
+  void initState() {
+    _wealth = widget.initialWealth;
+    super.initState();
+  }
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  double _amount;
+
+  Widget _buildAmountField() {
+    return TextFormField(
+      initialValue: _numberFormat.format(_wealth.amount),
+      validator: MultiValidator([
+        RequiredValidator(errorText: 'Amount is required'),
+        DoubleValidator(errorText: 'Amount is invalid'),
+      ]),
+      onSaved: (String value) {
+        _amount = double.parse(value);
+      },
+      decoration: InputDecoration(
+        labelText: 'Initial Amount',
+      ),
+      keyboardType: TextInputType.numberWithOptions(
+        decimal: true,
+        signed: false,
+      ),
+    );
+  }
+
+  _showInputAlertDialog(BuildContext context) {
+    // set up the button
+    Widget updateButton = RaisedButton(
+      child: Text('Update'),
+      onPressed: () {
+        if (!_formKey.currentState.validate()) {
+          return;
+        }
+        _formKey.currentState.save();
+        _updateWealthAmount(context);
+        Navigator.of(context).pop();
+      },
+    );
+
+    Widget cancelButton = FlatButton(
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+      child: Text('Cancel'),
+    );
+
+    // set up the AlertDialog
+    AlertDialog alertDialog = AlertDialog(
+      title: Text('Update Wealth Amount'),
+      content: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildAmountField(),
+          ],
+        ),
+      ),
+      actions: [
+        cancelButton,
+        updateButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alertDialog;
+      },
+    );
+  }
+
+  void _updateWealthAmount(BuildContext context) {
+    final wealthDatabase = Provider.of<WealthDatabase>(context);
+    final wealthDao = wealthDatabase.wealthDao;
+    final wealthHistoricalAmountDao = wealthDatabase.wealthHistoricalAmountDao;
+
+    DateTime _updatedDate = DateTime.now();
+    _wealth = _wealth.copyWith(amount: _amount, updatedDate: _updatedDate);
+    wealthDao.updateWealth(_wealth);
+    setState(() {});
+
+    WealthHistoricalAmount historicalAmount = WealthHistoricalAmount(
+      wealthId: _wealth.id,
+      amount: _amount,
+      updatedDate: _updatedDate,
+    );
+    wealthHistoricalAmountDao.insertWealthHistoricalAmount(historicalAmount);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +130,7 @@ class WealthDetailsScreen extends StatelessWidget {
         children: [
           Icon(FontAwesomeIcons.dollarSign, size: 14.0),
           Text(
-            _numberFormat.format(wealth.amount),
+            _numberFormat.format(_wealth.amount),
             style: TextStyle(fontSize: 20.0),
           ),
         ],
@@ -39,7 +142,7 @@ class WealthDetailsScreen extends StatelessWidget {
       children: <Widget>[
         SizedBox(height: 100.0),
         Icon(
-          IconDataSolid(wealth.iconCode),
+          IconDataSolid(_wealth.iconCode),
           color: Colors.white,
           size: 40.0,
         ),
@@ -51,7 +154,7 @@ class WealthDetailsScreen extends StatelessWidget {
         ),
         SizedBox(height: 10.0),
         Text(
-          wealth.title,
+          _wealth.title,
           style: TextStyle(color: Colors.white, fontSize: 45.0),
         ),
         SizedBox(height: 30.0),
@@ -59,7 +162,7 @@ class WealthDetailsScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             WealthChangeIndicator(
-              wealthId: wealth.id,
+              wealthId: _wealth.id,
             ),
             wealthAmount,
           ],
@@ -93,7 +196,9 @@ class WealthDetailsScreen extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 16.0),
         child: RaisedButton(
           padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-          onPressed: () => {},
+          onPressed: () {
+            _showInputAlertDialog(context);
+          },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,

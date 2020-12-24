@@ -24,11 +24,14 @@ class WealthChangeIndicator extends StatelessWidget {
       stream: _queryLatestWealthAmounts(context),
       builder: (BuildContext context,
           AsyncSnapshot<List<WealthHistoricalAmount>> snapshot) {
-        final historicalAmounts = snapshot.data;
         double changedAmount = 0.0;
-        if (historicalAmounts.length == 2) {
-          changedAmount =
-              historicalAmounts[0].amount - historicalAmounts[1].amount;
+
+        if (snapshot.hasData) {
+          final historicalAmounts = snapshot.data;
+          if (historicalAmounts.length == 2) {
+            changedAmount =
+                historicalAmounts[0].amount - historicalAmounts[1].amount;
+          }
         }
 
         var iconData = changedAmount >= 0

@@ -47,7 +47,7 @@ class WealthList extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          WealthDetailsScreen(wealth: itemWealth),
+                          WealthDetailsScreen(initialWealth: itemWealth),
                     ),
                   );
                 },

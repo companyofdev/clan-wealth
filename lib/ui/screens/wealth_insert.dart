@@ -1,5 +1,4 @@
 import 'package:clan_wealth/persistent/wealth.dart';
-import 'package:clan_wealth/persistent/wealth_dao.dart';
 import 'package:clan_wealth/ui/validator/double_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
