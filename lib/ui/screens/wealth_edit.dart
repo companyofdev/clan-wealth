@@ -4,15 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-class WealthInsertScreen extends StatefulWidget {
+class WealthEditScreen extends StatefulWidget {
+  final Wealth initialWealth;
+
+  const WealthEditScreen({this.initialWealth});
+
   @override
-  _WealthInsertScreenState createState() => _WealthInsertScreenState();
+  _WealthEditScreenState createState() => _WealthEditScreenState();
 }
 
-class _WealthInsertScreenState extends State<WealthInsertScreen> {
+class _WealthEditScreenState extends State<WealthEditScreen> {
   bool isAdaptive = true;
   bool showTooltips = false;
   bool showSearch = true;
@@ -22,13 +27,27 @@ class _WealthInsertScreenState extends State<WealthInsertScreen> {
   double _amount;
   IconData _iconData = FontAwesomeIcons.landmark;
 
+  Wealth _wealth;
+  bool _isEditMode;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final NumberFormat _numberFormat =
+      NumberFormat.currency(symbol: '', decimalDigits: 1);
+
+  @override
+  void initState() {
+    this._wealth = widget.initialWealth;
+    this._isEditMode = widget.initialWealth != null;
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Wealth'),
+        title: Text(_isEditMode ? 'Edit Wealth' : 'New Wealth'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -73,18 +92,22 @@ class _WealthInsertScreenState extends State<WealthInsertScreen> {
                                 return;
                               }
                               _formKey.currentState.save();
-                              _addWealth(context);
+                              _addOrUpdateWealth(context);
                               _formKey.currentState.reset();
                               Navigator.pop(context);
                             },
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(FontAwesomeIcons.plus),
+                                Icon(
+                                  _isEditMode
+                                      ? FontAwesomeIcons.edit
+                                      : FontAwesomeIcons.plus,
+                                ),
                                 SizedBox(
                                   width: 10.0,
                                 ),
-                                Text('Add'),
+                                Text(_isEditMode ? 'Update' : 'Add'),
                               ],
                             ),
                           ),
@@ -123,6 +146,7 @@ class _WealthInsertScreenState extends State<WealthInsertScreen> {
 
   Widget _buildTitleField() {
     return TextFormField(
+      initialValue: _isEditMode ? _wealth.title : '',
       validator: RequiredValidator(errorText: 'Title is required'),
       onSaved: (String value) {
         _title = value;
@@ -135,6 +159,7 @@ class _WealthInsertScreenState extends State<WealthInsertScreen> {
 
   Widget _buildDescriptionField() {
     return TextFormField(
+      initialValue: _isEditMode ? _wealth.description : '',
       onSaved: (String value) {
         _description = value;
       },
@@ -145,6 +170,9 @@ class _WealthInsertScreenState extends State<WealthInsertScreen> {
   }
 
   Widget _buildIconField() {
+    if (_isEditMode) {
+      _iconData = IconDataSolid(_wealth.iconCode);
+    }
     return Container(
       margin: EdgeInsets.symmetric(vertical: 20.0),
       child: Row(
@@ -167,6 +195,7 @@ class _WealthInsertScreenState extends State<WealthInsertScreen> {
 
   Widget _buildAmountField() {
     return TextFormField(
+      initialValue: _isEditMode ? _numberFormat.format(_wealth.amount) : '',
       validator: MultiValidator([
         RequiredValidator(errorText: 'Amount is required'),
         DoubleValidator(errorText: 'Amount is invalid'),
@@ -184,21 +213,31 @@ class _WealthInsertScreenState extends State<WealthInsertScreen> {
     );
   }
 
-  void _addWealth(BuildContext context) {
+  void _addOrUpdateWealth(BuildContext context) {
     final wealthDatabase = Provider.of<WealthDatabase>(context);
     final wealthDao = wealthDatabase.wealthDao;
     final wealthHistoricalAmountDao = wealthDatabase.wealthHistoricalAmountDao;
-    String _wealthId = Uuid().v4();
+    String _wealthId = _isEditMode ? _wealth.id : Uuid().v4();
     DateTime _updatedDate = DateTime.now();
-    Wealth wealth = Wealth(
-      id: _wealthId,
-      title: _title,
-      description: _description,
-      amount: _amount,
-      iconCode: _iconData.codePoint,
-      updatedDate: _updatedDate,
-    );
-    wealthDao.insertWealth(wealth);
+
+    if (_isEditMode) {
+      wealthDao.updateWealth(_wealth.copyWith(
+        title: _title,
+        description: _description,
+        iconCode: _iconData.codePoint,
+        amount: _amount,
+        updatedDate: _updatedDate,
+      ));
+    } else {
+      wealthDao.insertWealth(Wealth(
+        id: _wealthId,
+        title: _title,
+        description: _description,
+        amount: _amount,
+        iconCode: _iconData.codePoint,
+        updatedDate: _updatedDate,
+      ));
+    }
 
     WealthHistoricalAmount historicalAmount = WealthHistoricalAmount(
       wealthId: _wealthId,

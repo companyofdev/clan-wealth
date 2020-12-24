@@ -14,7 +14,7 @@ class WealthCard extends StatelessWidget {
     return Card(
       elevation: 8.0,
       margin: const EdgeInsets.symmetric(
-        horizontal: 10.0,
+        // horizontal: 10.0,
         vertical: 6.0,
       ),
       child: Container(

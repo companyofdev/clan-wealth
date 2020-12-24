@@ -1,6 +1,6 @@
 import 'package:clan_wealth/ui/components/cw_bottom_navigation_bar.dart';
 import 'package:clan_wealth/ui/components/wealth_list.dart';
-import 'package:clan_wealth/ui/screens/wealth_insert.dart';
+import 'package:clan_wealth/ui/screens/wealth_edit.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatelessWidget {
@@ -26,9 +26,9 @@ class MainPage extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => WealthInsertScreen(),
+              builder: (context) => WealthEditScreen(),
             ),
-          ).then((value) {});
+          );
         },
       ),
       bottomNavigationBar: CwBottomNavigationBar(),

@@ -1,6 +1,7 @@
 import 'package:clan_wealth/persistent/wealth.dart';
 import 'package:clan_wealth/ui/components/wealth_card.dart';
 import 'package:clan_wealth/ui/screens/wealth_details.dart';
+import 'package:clan_wealth/ui/screens/wealth_edit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,8 @@ class WealthList extends StatelessWidget {
   StreamBuilder<List<Wealth>> _buildWealthList(BuildContext context) {
     final wealthDatabase = Provider.of<WealthDatabase>(context);
     final wealthDao = wealthDatabase.wealthDao;
+    final wealthHistoricalAmountsDao = wealthDatabase.wealthHistoricalAmountDao;
+
     return StreamBuilder(
       stream: wealthDao.watchAllWealths(),
       builder: (context, AsyncSnapshot<List<Wealth>> snapshot) {
@@ -36,6 +39,27 @@ class WealthList extends StatelessWidget {
                     icon: Icons.delete,
                     onTap: () {
                       wealthDao.deleteWealth(itemWealth);
+                      wealthHistoricalAmountsDao
+                          .deleteAllWealthHistoricalAmountsByWealthId(
+                              itemWealth.id);
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6.0),
+                  child: IconSlideAction(
+                    caption: 'Edit',
+                    color: Colors.blue,
+                    icon: Icons.edit,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => WealthEditScreen(
+                            initialWealth: itemWealth,
+                          ),
+                        ),
+                      );
                     },
                   ),
                 ),

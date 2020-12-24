@@ -34,8 +34,15 @@ class WealthHistoricalAmountDao extends DatabaseAccessor<WealthDatabase>
 
   Future insertWealthHistoricalAmount(WealthHistoricalAmount amount) =>
       into(wealthHistoricalAmounts).insert(amount);
+
   Future updateWealthHistoricalAmount(WealthHistoricalAmount amount) =>
       update(wealthHistoricalAmounts).replace(amount);
+
+  Future deleteAllWealthHistoricalAmountsByWealthId(String wealthId) =>
+      (delete(wealthHistoricalAmounts)
+            ..where((tbl) => tbl.wealthId.equals(wealthId)))
+          .go();
+
   Future deleteWealthHistoricalAmount(WealthHistoricalAmount amount) =>
       delete(wealthHistoricalAmounts).delete(amount);
 }
