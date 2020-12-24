@@ -1,5 +1,5 @@
 import 'package:clan_wealth/persistent/wealth.dart';
-import 'package:clan_wealth/ui/components/wealth_change_indicator.dart';
+import 'package:clan_wealth/ui/components/wealth_amount_changed_indicator.dart';
 import 'package:clan_wealth/ui/validator/double_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -161,7 +161,7 @@ class _WealthDetailsScreenState extends State<WealthDetailsScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            WealthChangeIndicator(
+            WealthAmountChangedIndicator(
               wealthId: _wealth.id,
             ),
             wealthAmount,

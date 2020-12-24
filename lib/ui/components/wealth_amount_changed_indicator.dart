@@ -4,10 +4,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class WealthChangeIndicator extends StatelessWidget {
+class WealthAmountChangedIndicator extends StatelessWidget {
   final String wealthId;
 
-  WealthChangeIndicator({this.wealthId});
+  WealthAmountChangedIndicator({this.wealthId});
 
   final NumberFormat _numberFormat =
       NumberFormat.currency(symbol: '', decimalDigits: 1);
