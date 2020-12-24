@@ -1,5 +1,4 @@
 import 'package:clan_wealth/persistent/wealth.dart';
-import 'package:clan_wealth/persistent/wealth_dao.dart';
 import 'package:clan_wealth/ui/components/wealth_card.dart';
 import 'package:clan_wealth/ui/screens/wealth_details.dart';
 import 'package:flutter/material.dart';

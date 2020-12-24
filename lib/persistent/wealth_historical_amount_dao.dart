@@ -14,11 +14,23 @@ class WealthHistoricalAmountDao extends DatabaseAccessor<WealthDatabase>
       (select(wealthHistoricalAmounts)
             ..where((tbl) => tbl.wealthId.equals(wealthId)))
           .get();
+
   Stream<List<WealthHistoricalAmount>> watchAllWealthHistoricalAmountByWealthId(
           String wealthId) =>
       (select(wealthHistoricalAmounts)
             ..where((tbl) => tbl.wealthId.equals(wealthId)))
           .watch();
+
+  Stream<List<WealthHistoricalAmount>>
+      watchLimitWealthHistoricalAmountByWealthId(String wealthId, int limit) =>
+          (select(wealthHistoricalAmounts)
+                ..where((tbl) => tbl.wealthId.equals(wealthId))
+                ..orderBy([
+                  (t) => OrderingTerm(
+                      expression: t.updatedDate, mode: OrderingMode.desc)
+                ])
+                ..limit(limit))
+              .watch();
 
   Future insertWealthHistoricalAmount(WealthHistoricalAmount amount) =>
       into(wealthHistoricalAmounts).insert(amount);
