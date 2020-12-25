@@ -43,73 +43,77 @@ class WealthContainer extends StatelessWidget {
     );
   }
 
+  _buildTopBanner(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          height: MediaQuery.of(context).size.height * .30,
+          padding: EdgeInsets.only(top: 55, left: 20, right: 20),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [const Color(0xFF81269D), const Color(0xFFEE112D)],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              // stops: [0.0, 0.1],
+            ),
+          ),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.menu,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {},
+                  ),
+                  Text(
+                    "Your Wealth",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      FontAwesomeIcons.bell,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              _buildAggregateData(context),
+            ],
+          ),
+        ),
+        // Container(
+        //   height: MediaQuery.of(context).size.height * .60,
+        // ),
+      ],
+    );
+  }
+
+  _buildWealthList(BuildContext context) {
+    return Container(
+      alignment: Alignment.topCenter,
+      padding: new EdgeInsets.only(
+          top: MediaQuery.of(context).size.height * .20,
+          right: 10.0,
+          left: 10.0),
+      child: body,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Column(
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height * .30,
-              padding: EdgeInsets.only(top: 55, left: 20, right: 20),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [const Color(0xFF81269D), const Color(0xFFEE112D)],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  // stops: [0.0, 0.1],
-                ),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        icon: Icon(
-                          Icons.menu,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {},
-                      ),
-                      Text(
-                        "Your Wealth",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          FontAwesomeIcons.bell,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  _buildAggregateData(context),
-                ],
-              ),
-            ),
-            // Container(
-            //   height: MediaQuery.of(context).size.height * .60,
-            // ),
-          ],
-        ),
-        Container(
-          alignment: Alignment.topCenter,
-          padding: new EdgeInsets.only(
-              top: MediaQuery.of(context).size.height * .20,
-              right: 10.0,
-              left: 10.0),
-          child: new Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: body,
-          ),
-        ),
+        _buildTopBanner(context),
+        _buildWealthList(context),
       ],
     );
   }

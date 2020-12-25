@@ -24,6 +24,7 @@ class WealthList extends StatelessWidget {
       builder: (context, AsyncSnapshot<List<Wealth>> snapshot) {
         final _wealths = snapshot.data ?? List.empty();
         return ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemBuilder: (_, index) {
