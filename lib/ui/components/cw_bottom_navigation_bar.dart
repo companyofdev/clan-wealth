@@ -1,32 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class CwBottomNavigationBar extends StatelessWidget {
+class CwBottomNavigationBar extends StatefulWidget {
+  @override
+  _CwBottomNavigationBarState createState() => _CwBottomNavigationBarState();
+}
+
+class _CwBottomNavigationBarState extends State<CwBottomNavigationBar> {
+  int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 55.0,
-      child: BottomAppBar(
-        // color: kColor,
-        shape: CircularNotchedRectangle(),
-        notchMargin: 4.0,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                icon: Icon(FontAwesomeIcons.wallet, color: Colors.white),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Icon(FontAwesomeIcons.users, color: Colors.white),
-                onPressed: () {},
-              ),
-            ],
-          ),
+    return BottomNavigationBar(
+      elevation: 10.0,
+      currentIndex: _selectedIndex,
+      items: [
+        BottomNavigationBarItem(
+          icon: Icon(FontAwesomeIcons.wallet),
+          label: 'Your Wealth',
         ),
-      ),
+        BottomNavigationBarItem(
+          icon: Icon(FontAwesomeIcons.users),
+          label: 'Clan Wealth',
+        ),
+      ],
     );
   }
 }

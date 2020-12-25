@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return Provider(
       create: (_) => WealthDatabase(),
       child: MaterialApp(
-        title: 'Clan of Wealth App',
+        title: 'Clan of Wealth',
         theme: ThemeData.dark(),
         home: MainPage(),
       ),
