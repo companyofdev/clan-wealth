@@ -12,7 +12,7 @@ class WealthContainer extends StatelessWidget {
       NumberFormat.currency(symbol: '', decimalDigits: 1);
 
   StreamBuilder<List<Wealth>> _buildAggregateData(BuildContext context) {
-    final wealthDatabase = Provider.of<WealthDatabase>(context);
+    final wealthDatabase = context.watch<WealthDatabase>();
     final wealthDao = wealthDatabase.wealthDao;
     return StreamBuilder(
       stream: wealthDao.watchAllWealths(),

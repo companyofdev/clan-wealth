@@ -13,7 +13,7 @@ class WealthAmountChangedIndicator extends StatelessWidget {
       NumberFormat.currency(symbol: '', decimalDigits: 1);
 
   _queryLatestWealthAmounts(BuildContext context) {
-    final wealthDatabase = Provider.of<WealthDatabase>(context);
+    final wealthDatabase = context.watch<WealthDatabase>();
     final wealthHistoricalAmountDao = wealthDatabase.wealthHistoricalAmountDao;
     return wealthHistoricalAmountDao.watchLimitWealthHistoricalAmountByWealthId(
         wealthId, 2);

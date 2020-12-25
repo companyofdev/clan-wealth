@@ -20,7 +20,7 @@ class WealthAmountList extends StatelessWidget {
 
   StreamBuilder<List<WealthHistoricalAmount>> _buildWealthAmountList(
       BuildContext context) {
-    final wealthDatabase = Provider.of<WealthDatabase>(context);
+    final wealthDatabase = context.watch<WealthDatabase>();
     final wealthHistoricalAmountDao = wealthDatabase.wealthHistoricalAmountDao;
     print(wealthId);
 

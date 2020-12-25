@@ -210,7 +210,7 @@ class _WealthEditScreenState extends State<WealthEditScreen> {
   }
 
   void _addOrUpdateWealth(BuildContext context) {
-    final wealthDatabase = Provider.of<WealthDatabase>(context);
+    final wealthDatabase = context.watch<WealthDatabase>();
     final wealthDao = wealthDatabase.wealthDao;
     final wealthHistoricalAmountDao = wealthDatabase.wealthHistoricalAmountDao;
     String _wealthId = _isEditMode ? _wealth.id : Uuid().v4();

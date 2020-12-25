@@ -15,7 +15,7 @@ class WealthList extends StatelessWidget {
   }
 
   StreamBuilder<List<Wealth>> _buildWealthList(BuildContext context) {
-    final wealthDatabase = Provider.of<WealthDatabase>(context);
+    final wealthDatabase = context.watch<WealthDatabase>();
     final wealthDao = wealthDatabase.wealthDao;
     final wealthHistoricalAmountsDao = wealthDatabase.wealthHistoricalAmountDao;
 
