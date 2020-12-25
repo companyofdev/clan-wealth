@@ -8,7 +8,6 @@ class WealthAmountList extends StatelessWidget {
 
   WealthAmountList({this.wealthId});
 
-  final DateFormat _dateFormat = DateFormat.yMd('en_US');
   final NumberFormat _numberFormat =
       NumberFormat.currency(symbol: '', decimalDigits: 1);
 
@@ -49,7 +48,6 @@ class WealthAmountList extends StatelessWidget {
                 ),
               ),
             );
-            ;
           },
         );
       },

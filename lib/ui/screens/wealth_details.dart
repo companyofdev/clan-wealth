@@ -33,7 +33,7 @@ class _WealthDetailsScreenState extends State<WealthDetailsScreen> {
 
   Widget _buildAmountField() {
     return TextFormField(
-      initialValue: _numberFormat.format(_wealth.amount),
+      initialValue: _wealth.amount.toString(),
       validator: MultiValidator([
         RequiredValidator(errorText: 'Amount is required'),
         DoubleValidator(errorText: 'Amount is invalid'),

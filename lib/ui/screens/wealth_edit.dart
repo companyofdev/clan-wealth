@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -31,9 +30,6 @@ class _WealthEditScreenState extends State<WealthEditScreen> {
   bool _isEditMode;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  final NumberFormat _numberFormat =
-      NumberFormat.currency(symbol: '', decimalDigits: 1);
 
   @override
   void initState() {
@@ -195,7 +191,7 @@ class _WealthEditScreenState extends State<WealthEditScreen> {
 
   Widget _buildAmountField() {
     return TextFormField(
-      initialValue: _isEditMode ? _numberFormat.format(_wealth.amount) : '',
+      initialValue: _isEditMode ? _wealth.amount.toString() : '',
       validator: MultiValidator([
         RequiredValidator(errorText: 'Amount is required'),
         DoubleValidator(errorText: 'Amount is invalid'),
