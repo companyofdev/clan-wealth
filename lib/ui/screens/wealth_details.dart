@@ -100,7 +100,7 @@ class _WealthDetailsScreenState extends State<WealthDetailsScreen> {
   }
 
   void _updateWealthAmount(BuildContext context) {
-    final wealthDatabase = context.watch<WealthDatabase>();
+    final wealthDatabase = context.read<WealthDatabase>();
     final wealthDao = wealthDatabase.wealthDao;
     final wealthHistoricalAmountDao = wealthDatabase.wealthHistoricalAmountDao;
 
