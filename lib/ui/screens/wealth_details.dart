@@ -99,14 +99,14 @@ class _WealthDetailsScreenState extends State<WealthDetailsScreen> {
     );
   }
 
-  void _updateWealthAmount(BuildContext context) {
+  Future<void> _updateWealthAmount(BuildContext context) async {
     final wealthDatabase = context.read<WealthDatabase>();
     final wealthDao = wealthDatabase.wealthDao;
     final wealthHistoricalAmountDao = wealthDatabase.wealthHistoricalAmountDao;
 
     DateTime _updatedDate = DateTime.now();
     _wealth = _wealth.copyWith(amount: _amount, updatedDate: _updatedDate);
-    wealthDao.updateWealth(_wealth);
+    await wealthDao.updateWealth(_wealth);
     setState(() {});
 
     WealthHistoricalAmount historicalAmount = WealthHistoricalAmount(
@@ -114,7 +114,8 @@ class _WealthDetailsScreenState extends State<WealthDetailsScreen> {
       amount: _amount,
       updatedDate: _updatedDate,
     );
-    wealthHistoricalAmountDao.insertWealthHistoricalAmount(historicalAmount);
+    await wealthHistoricalAmountDao
+        .insertWealthHistoricalAmount(historicalAmount);
   }
 
   @override

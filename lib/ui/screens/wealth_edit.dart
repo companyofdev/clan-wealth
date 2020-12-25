@@ -209,7 +209,7 @@ class _WealthEditScreenState extends State<WealthEditScreen> {
     );
   }
 
-  void _addOrUpdateWealth(BuildContext context) {
+  Future<void> _addOrUpdateWealth(BuildContext context) async {
     final wealthDatabase = context.read<WealthDatabase>();
     final wealthDao = wealthDatabase.wealthDao;
     final wealthHistoricalAmountDao = wealthDatabase.wealthHistoricalAmountDao;
@@ -217,7 +217,7 @@ class _WealthEditScreenState extends State<WealthEditScreen> {
     DateTime _updatedDate = DateTime.now();
 
     if (_isEditMode) {
-      wealthDao.updateWealth(_wealth.copyWith(
+      await wealthDao.updateWealth(_wealth.copyWith(
         title: _title,
         description: _description,
         iconCode: _iconData.codePoint,
@@ -225,7 +225,7 @@ class _WealthEditScreenState extends State<WealthEditScreen> {
         updatedDate: _updatedDate,
       ));
     } else {
-      wealthDao.insertWealth(Wealth(
+      await wealthDao.insertWealth(Wealth(
         id: _wealthId,
         title: _title,
         description: _description,
@@ -240,6 +240,7 @@ class _WealthEditScreenState extends State<WealthEditScreen> {
       amount: _amount,
       updatedDate: _updatedDate,
     );
-    wealthHistoricalAmountDao.insertWealthHistoricalAmount(historicalAmount);
+    await wealthHistoricalAmountDao
+        .insertWealthHistoricalAmount(historicalAmount);
   }
 }
