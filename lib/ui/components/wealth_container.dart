@@ -23,20 +23,20 @@ class WealthContainer extends StatelessWidget {
         return Column(
           children: [
             Text(
-              _numberFormat.format(totalAmount),
+              r'$' + _numberFormat.format(totalAmount),
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 45.0,
                   fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 20),
-            Text(
-              r"+ $3,157.67 (23%)",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w300),
-            ),
+            // SizedBox(height: 20),
+            // Text(
+            //   r"+ $3,157.67 (23%)",
+            //   style: TextStyle(
+            //       color: Colors.white,
+            //       fontSize: 18.0,
+            //       fontWeight: FontWeight.w300),
+            // ),
           ],
         );
       },
@@ -50,7 +50,7 @@ class WealthContainer extends StatelessWidget {
         Column(
           children: [
             Container(
-              height: 300.0,
+              height: MediaQuery.of(context).size.height * .30,
               padding: EdgeInsets.only(top: 55, left: 20, right: 20),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -73,7 +73,7 @@ class WealthContainer extends StatelessWidget {
                         onPressed: () {},
                       ),
                       Text(
-                        "Clan Wealth",
+                        "Your Wealth",
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 20.0,
@@ -93,15 +93,15 @@ class WealthContainer extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
-              height: MediaQuery.of(context).size.height * .60,
-            ),
+            // Container(
+            //   height: MediaQuery.of(context).size.height * .60,
+            // ),
           ],
         ),
         Container(
           alignment: Alignment.topCenter,
           padding: new EdgeInsets.only(
-              top: MediaQuery.of(context).size.height * .25,
+              top: MediaQuery.of(context).size.height * .20,
               right: 10.0,
               left: 10.0),
           child: new Container(
