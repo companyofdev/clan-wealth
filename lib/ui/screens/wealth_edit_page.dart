@@ -7,16 +7,16 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-class WealthEditScreen extends StatefulWidget {
+class WealthEditPage extends StatefulWidget {
   final Wealth initialWealth;
 
-  const WealthEditScreen({this.initialWealth});
+  const WealthEditPage({this.initialWealth});
 
   @override
-  _WealthEditScreenState createState() => _WealthEditScreenState();
+  _WealthEditPageState createState() => _WealthEditPageState();
 }
 
-class _WealthEditScreenState extends State<WealthEditScreen> {
+class _WealthEditPageState extends State<WealthEditPage> {
   bool isAdaptive = true;
   bool showTooltips = false;
   bool showSearch = true;

@@ -1,4 +1,5 @@
-import 'package:clan_wealth/main_page.dart';
+import 'package:clan_wealth/ui/screens/clan_page.dart';
+import 'package:clan_wealth/ui/screens/wealth_list_page.dart';
 import 'package:clan_wealth/persistent/wealth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +21,11 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Clan of Wealth',
         theme: ThemeData.dark(),
-        home: MainPage(),
+        routes: {
+          WealthListPage.pageId: (_) => WealthListPage(),
+          ClanPage.pageId: (_) => ClanPage(),
+        },
+        initialRoute: WealthListPage.pageId,
       ),
     );
   }

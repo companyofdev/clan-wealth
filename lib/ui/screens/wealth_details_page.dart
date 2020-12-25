@@ -7,16 +7,16 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class WealthDetailsScreen extends StatefulWidget {
+class WealthDetailsPage extends StatefulWidget {
   final Wealth initialWealth;
 
-  WealthDetailsScreen({this.initialWealth});
+  WealthDetailsPage({this.initialWealth});
 
   @override
-  _WealthDetailsScreenState createState() => _WealthDetailsScreenState();
+  _WealthDetailsPageState createState() => _WealthDetailsPageState();
 }
 
-class _WealthDetailsScreenState extends State<WealthDetailsScreen> {
+class _WealthDetailsPageState extends State<WealthDetailsPage> {
   Wealth _wealth;
 
   final NumberFormat _numberFormat =

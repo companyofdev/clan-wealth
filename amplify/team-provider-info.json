@@ -1,0 +1,15 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-clanwealth-dev-175017-authRole",
+            "UnauthRoleArn": "arn:aws:iam::827726978788:role/amplify-clanwealth-dev-175017-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::827726978788:role/amplify-clanwealth-dev-175017-authRole",
+            "Region": "eu-west-1",
+            "DeploymentBucketName": "amplify-clanwealth-dev-175017-deployment",
+            "UnauthRoleName": "amplify-clanwealth-dev-175017-unauthRole",
+            "StackName": "amplify-clanwealth-dev-175017",
+            "StackId": "arn:aws:cloudformation:eu-west-1:827726978788:stack/amplify-clanwealth-dev-175017/46577ce0-46d1-11eb-b5b5-0aa19f5e26ca",
+            "AmplifyAppId": "d4muymfy7t2l2"
+        }
+    }
+}

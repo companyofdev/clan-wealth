@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
+class ClanPage extends StatelessWidget {
+  static const String pageId = 'clan_page';
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            'Home',
-          ),
+        children: [
+          Text('Clan Page'),
         ],
       ),
     );
