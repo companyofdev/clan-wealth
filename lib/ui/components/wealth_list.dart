@@ -1,7 +1,7 @@
 import 'package:clan_wealth/persistent/wealth.dart';
 import 'package:clan_wealth/ui/components/wealth_card.dart';
-import 'package:clan_wealth/ui/screens/wealth_details_page.dart';
-import 'package:clan_wealth/ui/screens/wealth_edit_page.dart';
+import 'package:clan_wealth/ui/page/wealth_details_page.dart';
+import 'package:clan_wealth/ui/page/wealth_edit_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
