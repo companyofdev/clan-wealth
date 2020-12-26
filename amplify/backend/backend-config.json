@@ -1,1 +1,16 @@
-{}
+{
+  "auth": {
+    "cognitob69e160a": {
+      "service": "Cognito",
+      "serviceType": "managed",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": []
+    }
+  },
+  "analytics": {
+    "clanwealth": {
+      "service": "Pinpoint",
+      "providerPlugin": "awscloudformation"
+    }
+  }
+}
