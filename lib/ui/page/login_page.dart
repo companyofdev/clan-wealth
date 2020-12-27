@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:clan_wealth/ui/page/master_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
@@ -128,6 +131,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void _signIn() async {
     try {
+      EasyLoading.show(status: 'loading...');
       SignInResult res = await Amplify.Auth.signIn(
         username: _username,
         password: _password,
@@ -136,6 +140,7 @@ class _LoginPageState extends State<LoginPage> {
     } on AuthError catch (ex) {
       print('Sign in error: ' + ex.cause);
     }
+    EasyLoading.dismiss();
     return null;
   }
 

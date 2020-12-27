@@ -3,6 +3,7 @@ import 'package:clan_wealth/ui/page/login_page.dart';
 import 'package:clan_wealth/ui/page/master_page.dart';
 import 'package:clan_wealth/persistent/wealth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         title: 'Clan of Wealth',
         theme: ThemeData.dark(),
         home: MasterPage(),
+        builder: EasyLoading.init(),
       ),
     );
   }
