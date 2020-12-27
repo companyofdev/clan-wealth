@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+// Copy style from https://www.youtube.com/watch?v=gzfJaDt9ok8
 class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -17,6 +18,7 @@ class SettingsPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Card(
+              elevation: 8.0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
@@ -35,12 +37,23 @@ class SettingsPage extends StatelessWidget {
               ),
             ),
             Card(
+              elevation: 4.0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
               margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
               child: Column(
                 children: [
+                  ListTile(
+                    contentPadding: EdgeInsets.all(10.0),
+                    title: Text(
+                      'Change Language',
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    leading: Icon(FontAwesomeIcons.language),
+                    trailing: Icon(Icons.keyboard_arrow_right),
+                  ),
+                  _buildDivider(),
                   ListTile(
                     contentPadding: EdgeInsets.all(10.0),
                     title: Text(
@@ -67,6 +80,15 @@ class SettingsPage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Container _buildDivider() {
+    return Container(
+      width: double.infinity,
+      height: 1.0,
+      color: Colors.white10,
+      margin: EdgeInsets.symmetric(horizontal: 8.0),
     );
   }
 
