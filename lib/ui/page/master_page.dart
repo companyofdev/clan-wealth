@@ -1,4 +1,5 @@
 import 'package:clan_wealth/ui/page/clan_wealth_page.dart';
+import 'package:clan_wealth/ui/page/login_page.dart';
 import 'package:clan_wealth/ui/page/your_wealth_page.dart';
 import 'package:clan_wealth/ui/page/wealth_edit_page.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class _MasterPageState extends State<MasterPage> {
 
   var _screens = [
     YourWealthPage(),
-    ClanWealthPage(),
+    LoginPage(),
   ];
 
   @override

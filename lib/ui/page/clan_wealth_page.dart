@@ -1,4 +1,3 @@
-import 'package:amplify_analytics_pinpoint/amplify_analytics_pinpoint.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:flutter/material.dart';
@@ -24,10 +23,8 @@ class _ClanWealthPageState extends State<ClanWealthPage> {
   void _configureAmplify() async {
     if (!mounted) return;
     // Add Pinpoint and Cognito Plugins
-    AmplifyAnalyticsPinpoint analyticsPlugin = AmplifyAnalyticsPinpoint();
     AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
     amplifyInstance.addPlugin(authPlugins: [authPlugin]);
-    amplifyInstance.addPlugin(analyticsPlugins: [analyticsPlugin]);
 
     // Once Plugins are added, configure Amplify
     await amplifyInstance.configure(amplifyconfig);
@@ -39,8 +36,6 @@ class _ClanWealthPageState extends State<ClanWealthPage> {
       print(e);
     }
   }
-
-  void _recordEvent() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +53,7 @@ class _ClanWealthPageState extends State<ClanWealthPage> {
                   const Padding(padding: EdgeInsets.all(5.0)),
                   Text(_amplifyConfigured ? "configured" : "not configured"),
                   RaisedButton(
-                    // onPressed: _amplifyConfigured ? _recordEvent : null,
+                    onPressed: () {},
                     child: const Text('record event'),
                   ),
                 ],
