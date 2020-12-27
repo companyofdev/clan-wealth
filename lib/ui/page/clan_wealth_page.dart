@@ -1,7 +1,8 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_core/amplify_core.dart';
+import 'package:clan_wealth/ui/components/top_bar.dart';
+import 'package:clan_wealth/ui/page/login_page.dart';
 import 'package:flutter/material.dart';
-import 'package:clan_wealth/amplifyconfiguration.dart';
 
 class ClanWealthPage extends StatefulWidget {
   @override
@@ -9,59 +10,72 @@ class ClanWealthPage extends StatefulWidget {
 }
 
 class _ClanWealthPageState extends State<ClanWealthPage> {
-  bool _amplifyConfigured = false;
-
-  // Instantiate Amplify
-  Amplify amplifyInstance = Amplify();
+  Future<AuthUser> _futureAuthUser;
 
   @override
   void initState() {
     super.initState();
-    _configureAmplify();
+    _initAuth();
   }
 
-  void _configureAmplify() async {
-    if (!mounted) return;
-    // Add Pinpoint and Cognito Plugins
-    AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
-    amplifyInstance.addPlugin(authPlugins: [authPlugin]);
-
-    // Once Plugins are added, configure Amplify
-    await amplifyInstance.configure(amplifyconfig);
-    try {
-      setState(() {
-        _amplifyConfigured = true;
-      });
-    } catch (e) {
-      print(e);
-    }
+  void _initAuth() {
+    _futureAuthUser = Amplify.Auth.getCurrentUser();
+    _futureAuthUser.then((authUser) {
+      print('Finish loading user:');
+      if (authUser == null) {
+        _navigateLoginPage(context);
+      }
+    }).catchError((err) {
+      print('Get authUser error: $err');
+      _navigateLoginPage(context);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Amplify Core example app'),
-        ),
-        body: ListView(
-          padding: EdgeInsets.all(10.0),
-          children: <Widget>[
-            Center(
-              child: Column(
+      home: FutureBuilder(
+        future: _futureAuthUser,
+        builder: (context, AsyncSnapshot<AuthUser> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.hasData) {
+            final AuthUser _authUser = snapshot.data;
+            print(_authUser.username);
+            return Scaffold(
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Padding(padding: EdgeInsets.all(5.0)),
-                  Text(_amplifyConfigured ? "configured" : "not configured"),
+                  TopBar(),
+                  Center(child: Text('Abc: ${_authUser.username}')),
                   RaisedButton(
-                    onPressed: () {},
-                    child: const Text('record event'),
-                  ),
+                    onPressed: _signOut,
+                    child: Text('Sign out'),
+                  )
                 ],
               ),
-            )
-          ],
-        ),
+            );
+          }
+          return Container(
+            child: Center(
+              child: Text('Waiting....'),
+            ),
+          );
+        },
       ),
     );
+  }
+
+  void _navigateLoginPage(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoginPage(),
+      ),
+    );
+  }
+
+  void _signOut() {
+    Amplify.Auth.signOut();
+    _navigateLoginPage(context);
   }
 }

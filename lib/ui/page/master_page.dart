@@ -16,7 +16,7 @@ class _MasterPageState extends State<MasterPage> {
 
   var _screens = [
     YourWealthPage(),
-    LoginPage(),
+    ClanWealthPage(),
   ];
 
   @override

@@ -1,5 +1,5 @@
+import 'package:clan_wealth/ui/components/top_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:clan_wealth/persistent/wealth.dart';
@@ -29,14 +29,6 @@ class WealthContainer extends StatelessWidget {
                   fontSize: 45.0,
                   fontWeight: FontWeight.bold),
             ),
-            // SizedBox(height: 20),
-            // Text(
-            //   r"+ $3,157.67 (23%)",
-            //   style: TextStyle(
-            //       color: Colors.white,
-            //       fontSize: 18.0,
-            //       fontWeight: FontWeight.w300),
-            // ),
           ],
         );
       },
@@ -59,32 +51,7 @@ class WealthContainer extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.menu,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {},
-                  ),
-                  Text(
-                    "Your Wealth",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      FontAwesomeIcons.bell,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
+              TopBar(),
               SizedBox(height: 20),
               _buildAggregateData(context),
             ],

@@ -1,3 +1,4 @@
+import 'package:clan_wealth/service/amplify_service.dart';
 import 'package:clan_wealth/ui/page/master_page.dart';
 import 'package:clan_wealth/persistent/wealth.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +16,14 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    return Provider(
-      create: (_) => WealthDatabase(),
+    return MultiProvider(
+      providers: [
+        Provider<WealthDatabase>(create: (_) => WealthDatabase()),
+        Provider<AmplifyService>(
+          create: (_) => AmplifyService(),
+          lazy: false,
+        ),
+      ],
       child: MaterialApp(
         title: 'Clan of Wealth',
         theme: ThemeData.dark(),

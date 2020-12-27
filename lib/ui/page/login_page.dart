@@ -1,8 +1,9 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_core/amplify_core.dart';
-import 'package:clan_wealth/amplifyconfiguration.dart';
+import 'package:clan_wealth/ui/page/clan_wealth_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -10,47 +11,79 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool _amplifyConfigured = false;
+  bool _isSignUpComplete;
 
-  // Instantiate Amplify
-  Amplify amplifyInstance = Amplify();
-
-  @override
-  void initState() {
-    super.initState();
-    _configureAmplify();
-  }
-
-  void _configureAmplify() async {
-    if (!mounted) return;
-    // Add Pinpoint and Cognito Plugins
-    AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
-    amplifyInstance.addPlugin(authPlugins: [authPlugin]);
-
-    // Once Plugins are added, configure Amplify
-    await amplifyInstance.configure(amplifyconfig);
-    try {
-      setState(() {
-        _amplifyConfigured = true;
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
+  bool _isSignInComplete;
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: FlutterLogin(
+    return Scaffold(
+      body: FlutterLogin(
+        theme: LoginTheme(
+          textFieldStyle: TextStyle(color: Colors.white),
+        ),
         onLogin: _onLogin,
-        onSignup: _onSignup,
+        onSignup: _onSignUp,
         onRecoverPassword: (_) => null,
+        onSubmitAnimationCompleted: _onAuthCompleted,
         title: 'Clan Wealth',
+        showDebugButtons: false,
       ),
     );
   }
 
-  Future<String> _onLogin(LoginData loginData) {}
+  Future<String> _onLogin(LoginData loginData) async {
+    try {
+      SignInResult res = await Amplify.Auth.signIn(
+        username: loginData.name,
+        password: loginData.password,
+      );
+      setState(() {
+        _isSignInComplete = res.isSignedIn;
+        print(
+            "Signed in: " + (_isSignInComplete ? "Complete" : "Not Complete"));
+      });
+      _onAuthCompleted();
+    } on AuthError catch (ex) {
+      print(ex.cause);
+      return "Sign in error: " + ex.cause;
+    }
+    return null;
+  }
 
-  Future<String> _onSignup(LoginData loginData) {}
+  Future<String> _onSignUp(LoginData loginData) async {
+    try {
+      Map<String, dynamic> userAttributes = {
+        "email": loginData.name,
+      };
+      SignUpResult res = await Amplify.Auth.signUp(
+        username: loginData.name,
+        password: loginData.password,
+        options: CognitoSignUpOptions(userAttributes: userAttributes),
+      );
+      setState(() {
+        _isSignUpComplete = res.isSignUpComplete;
+        print("Sign up: " + (_isSignUpComplete ? "Complete" : "Not Complete"));
+      });
+      if (_isSignUpComplete)
+        Alert(context: context, type: AlertType.success, title: "Login Success")
+            .show();
+    } on AuthError catch (err) {
+      print(err);
+      Alert(context: context, type: AlertType.error, title: "Login Failed")
+          .show();
+      return 'Register error: ${err.cause}';
+    }
+    return null;
+  }
+
+  void _onAuthCompleted() {
+    print('_onAuthCompleted');
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ClanWealthPage(),
+      ),
+    );
+  }
 }
