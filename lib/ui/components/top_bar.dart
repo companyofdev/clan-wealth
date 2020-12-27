@@ -1,3 +1,4 @@
+import 'package:clan_wealth/ui/page/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -12,7 +13,14 @@ class TopBar extends StatelessWidget {
             Icons.menu,
             color: Colors.white,
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SettingsPage(),
+              ),
+            );
+          },
         ),
         Text(
           "Your Wealth",

@@ -1,3 +1,5 @@
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_core/amplify_core.dart';
 import 'package:clan_wealth/ui/page/clan_wealth_page.dart';
 import 'package:clan_wealth/ui/page/login_page.dart';
 import 'package:clan_wealth/ui/page/your_wealth_page.dart';
@@ -13,11 +15,40 @@ class MasterPage extends StatefulWidget {
 class _MasterPageState extends State<MasterPage> {
   var _pageController = PageController();
   var _currentIndex = 0;
+  Future<AuthUser> _futureAuthUser;
 
   var _screens = [
     YourWealthPage(),
     ClanWealthPage(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _initAuth();
+  }
+
+  void _initAuth() {
+    _futureAuthUser = Amplify.Auth.getCurrentUser();
+    _futureAuthUser.then((authUser) {
+      print('Finish loading user:');
+      if (authUser == null) {
+        _navigateLoginPage(context);
+      }
+    }).catchError((err) {
+      print('Get authUser error: $err');
+      _navigateLoginPage(context);
+    });
+  }
+
+  void _navigateLoginPage(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoginPage(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
