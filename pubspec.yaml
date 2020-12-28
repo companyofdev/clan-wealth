@@ -32,7 +32,6 @@ dependencies:
   provider: ^4.3.2+3
   flutter_slidable: ^0.5.7
   form_field_validator: ^1.0.1
-  flutter_login: ^1.0.14
   rflutter_alert: ^1.1.0
   flutter_easyloading: ^2.2.1
 
@@ -45,10 +44,6 @@ dependencies:
   # Common libs
   uuid: ^2.2.2
 
-  # Amplify
-  amplify_core: '<1.0.0'
-  amplify_auth_cognito: '<1.0.0'
-#  amplify_analytics_pinpoint: '<1.0.0'
 
 dev_dependencies:
   flutter_test:
