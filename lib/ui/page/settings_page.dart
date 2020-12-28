@@ -1,6 +1,6 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_core/amplify_core.dart';
-import 'package:clan_wealth/ui/page/login_page.dart';
+import 'package:clan_wealth/ui/common_navigate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -95,12 +95,7 @@ class SettingsPage extends StatelessWidget {
   _signOut(BuildContext context) async {
     try {
       await Amplify.Auth.signOut();
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (context) => LoginPage(),
-        ),
-        (route) => false, // Remove all stack
-      );
+      navigateResetToLogin(context);
     } on AuthError catch (err) {
       print('Sign out error:' + err.toString());
     }

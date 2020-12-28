@@ -1,5 +1,4 @@
 import 'package:clan_wealth/service/amplify_service.dart';
-import 'package:clan_wealth/ui/page/login_page.dart';
 import 'package:clan_wealth/ui/page/master_page.dart';
 import 'package:clan_wealth/persistent/wealth.dart';
 import 'package:flutter/material.dart';

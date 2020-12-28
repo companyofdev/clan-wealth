@@ -1,16 +1,17 @@
-import 'dart:io';
-
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:clan_wealth/ui/common_alerts.dart';
-import 'package:clan_wealth/ui/page/master_page.dart';
+import 'package:clan_wealth/ui/common_navigate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class LoginPage extends StatefulWidget {
+  final String initialUsername;
+
+  const LoginPage({this.initialUsername});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -20,6 +21,12 @@ class _LoginPageState extends State<LoginPage> {
 
   String _username;
   String _password;
+
+  @override
+  void initState() {
+    super.initState();
+    _username = widget.initialUsername;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +62,9 @@ class _LoginPageState extends State<LoginPage> {
                       _buildDPasswordField(),
                       SizedBox(height: 50.0),
                       TextButton(
-                        onPressed: null,
+                        onPressed: () {
+                          navigatePushToForgotPassword(context);
+                        },
                         child: Text('Forgot Password?'),
                       ),
                       RaisedButton(
@@ -82,7 +91,9 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       FlatButton(
                         padding: EdgeInsets.all(20.0),
-                        onPressed: null,
+                        onPressed: () {
+                          navigatePushToSignUp(context);
+                        },
                         child: Text(
                           'SignUp',
                           style: TextStyle(color: Colors.white),
@@ -101,6 +112,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildUsernameField() {
     return TextFormField(
+      initialValue: _username,
       validator: MultiValidator([
         EmailValidator(errorText: 'Email is invalid'),
         RequiredValidator(errorText: 'Email is required'),
@@ -139,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
         password: _password,
       );
       if (res.isSignedIn) {
-        _onAuthCompleted();
+        navigateResetToHome(context);
       }
     } on AuthError catch (ex) {
       print('Sign in error: ' + ex.cause);
@@ -151,15 +163,6 @@ class _LoginPageState extends State<LoginPage> {
     } finally {
       EasyLoading.dismiss();
     }
-
     return null;
-  }
-
-  void _onAuthCompleted() {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => MasterPage(),
-      ),
-    );
   }
 }

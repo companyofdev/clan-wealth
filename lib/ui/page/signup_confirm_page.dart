@@ -2,25 +2,31 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:clan_wealth/ui/common_alerts.dart';
 import 'package:clan_wealth/ui/common_navigate.dart';
-import 'package:clan_wealth/ui/page/signup_confirm_page.dart';
-import 'package:clan_wealth/ui/validator/confirm_value_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
-class SignUpPage extends StatefulWidget {
+class SignUpConfirmPage extends StatefulWidget {
+  final String initialUsername;
+
+  const SignUpConfirmPage({this.initialUsername});
+
   @override
-  _SignUpPageState createState() => _SignUpPageState();
+  _SignUpConfirmPageState createState() => _SignUpConfirmPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<FormFieldState> _passwordFieldKey =
-      GlobalKey<FormFieldState>();
-
+class _SignUpConfirmPageState extends State<SignUpConfirmPage> {
   String _username;
-  String _password;
+  String _confirmCode;
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _username = widget.initialUsername;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,15 +59,8 @@ class _SignUpPageState extends State<SignUpPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       _buildUsernameField(),
-                      _buildPasswordField(),
-                      _buildConfirmPasswordField(),
+                      _buildConfirmCodeField(),
                       SizedBox(height: 50.0),
-                      TextButton(
-                        onPressed: () {
-                          navigateReplaceToSignUpConfirm(context);
-                        },
-                        child: Text('Sign Up Confirm?'),
-                      ),
                       RaisedButton(
                         padding: EdgeInsets.all(20.0),
                         onPressed: () {
@@ -69,25 +68,28 @@ class _SignUpPageState extends State<SignUpPage> {
                             return;
                           }
                           _formKey.currentState.save();
-                          _signUp();
+                          _signUpConfirm();
                         },
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(
-                              FontAwesomeIcons.userPlus,
+                              FontAwesomeIcons.check,
                             ),
                             SizedBox(
                               width: 10.0,
                             ),
-                            Text('Sign Up'),
+                            Text('Confirm'),
                           ],
                         ),
                       ),
                       FlatButton(
                         padding: EdgeInsets.all(20.0),
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          navigateResetToLogin(
+                            context,
+                            initialUsername: _username,
+                          );
                         },
                         child: Text(
                           'Cancel',
@@ -107,6 +109,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   TextFormField _buildUsernameField() {
     return TextFormField(
+      initialValue: _username,
       validator: MultiValidator([
         EmailValidator(errorText: 'Email is invalid'),
         RequiredValidator(errorText: 'Email is required'),
@@ -121,61 +124,45 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  TextFormField _buildPasswordField() {
+  TextFormField _buildConfirmCodeField() {
     return TextFormField(
-      key: _passwordFieldKey,
       validator: MultiValidator([
-        MinLengthValidator(8,
-            errorText: 'Password must contain at least 8 characters'),
-        RequiredValidator(errorText: 'Password is required'),
+        RequiredValidator(errorText: 'Code is required'),
       ]),
       onSaved: (String value) {
-        _password = value.trim();
+        _confirmCode = value.trim();
       },
       decoration: InputDecoration(
-        labelText: 'Password',
+        labelText: 'Confirm Code',
       ),
     );
   }
 
-  TextFormField _buildConfirmPasswordField() {
-    return TextFormField(
-      validator: MultiValidator([
-        RequiredValidator(errorText: 'Confirm password is required'),
-        ConfirmValueValidator(_passwordFieldKey,
-            errorText: 'Confirm password does not match password'),
-      ]),
-      decoration: InputDecoration(
-        labelText: 'Confirm Password',
-      ),
-    );
-  }
-
-  void _signUp() async {
+  void _signUpConfirm() async {
     try {
       EasyLoading.show(status: 'loading...');
 
-      Map<String, dynamic> userAttributes = {
-        "email": _username,
-        // additional attributes as needed
-      };
-
-      SignUpResult res = await Amplify.Auth.signUp(
+      SignUpResult res = await Amplify.Auth.confirmSignUp(
         username: _username,
-        password: _password,
-        options: CognitoSignUpOptions(userAttributes: userAttributes),
+        confirmationCode: _confirmCode,
       );
       print(res.nextStep.codeDeliveryDetails.deliveryMedium);
       print(res.nextStep.additionalInfo.toString());
       if (res.isSignUpComplete) {
-        navigateResetToLogin(context);
+        showSuccessAlert(
+          context: context,
+          desc: 'You have signed up successfully',
+          buttonText: 'To Login',
+          onPressed: () {
+            navigateResetToLogin(context, initialUsername: _username);
+          },
+        );
       }
-      navigateReplaceToSignUpConfirm(context, initialUsername: _username);
     } on AuthError catch (ex) {
       print('Sign up error: ' + ex.cause);
       showErrorAlert(
         context: context,
-        title: 'Sign up failed',
+        title: 'Sign up confirm failed',
         desc: ex.exceptionList.first.detail.toString(),
       );
     } finally {

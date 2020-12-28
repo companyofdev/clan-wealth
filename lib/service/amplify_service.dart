@@ -20,7 +20,6 @@ class AmplifyService {
   Amplify get amplifyInstance => _amplifyInstance;
 
   void _configureAmplify() async {
-    print('_configureAmplify');
     // Add Pinpoint and Cognito Plugins
     AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
     _amplifyInstance.addPlugin(authPlugins: [authPlugin]);
