@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_core/amplify_core.dart';
+import 'package:clan_wealth/ui/common_alerts.dart';
 import 'package:clan_wealth/ui/page/master_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -104,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
         RequiredValidator(errorText: 'Email is required'),
       ]),
       onSaved: (String value) {
-        _username = value;
+        _username = value.trim();
       },
       decoration: InputDecoration(
         labelText: 'Email',
@@ -121,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
         RequiredValidator(errorText: 'Password is required'),
       ]),
       onSaved: (String value) {
-        _password = value;
+        _password = value.trim();
       },
       decoration: InputDecoration(
         labelText: 'Password',
@@ -136,11 +138,20 @@ class _LoginPageState extends State<LoginPage> {
         username: _username,
         password: _password,
       );
-      _onAuthCompleted();
+      if (res.isSignedIn) {
+        _onAuthCompleted();
+      }
     } on AuthError catch (ex) {
       print('Sign in error: ' + ex.cause);
+      showErrorAlert(
+        context: context,
+        title: 'Sign in failed',
+        desc: ex.exceptionList.first.detail.toString(),
+      );
+    } finally {
+      EasyLoading.dismiss();
     }
-    EasyLoading.dismiss();
+
     return null;
   }
 
