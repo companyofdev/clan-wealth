@@ -7,14 +7,27 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
-class ForgotPasswordPage extends StatefulWidget {
+class PasswordConfirmPage extends StatefulWidget {
+  final String initialUsername;
+
+  const PasswordConfirmPage({this.initialUsername});
+
   @override
-  _ForgotPasswordPageState createState() => _ForgotPasswordPageState();
+  _PasswordConfirmPageState createState() => _PasswordConfirmPageState();
 }
 
-class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+class _PasswordConfirmPageState extends State<PasswordConfirmPage> {
   String _username;
+  String _newPassword;
+  String _confirmCode;
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _username = widget.initialUsername;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +60,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       _buildUsernameField(),
+                      _buildNewPasswordField(),
+                      _buildConfirmCodeField(),
                       SizedBox(height: 50.0),
                       RaisedButton(
                         padding: EdgeInsets.all(20.0),
@@ -55,25 +70,28 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             return;
                           }
                           _formKey.currentState.save();
-                          _resetPassword();
+                          _passwordConfirm();
                         },
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(
-                              FontAwesomeIcons.unlock,
+                              FontAwesomeIcons.check,
                             ),
                             SizedBox(
                               width: 10.0,
                             ),
-                            Text('Reset'),
+                            Text('Confirm'),
                           ],
                         ),
                       ),
                       FlatButton(
                         padding: EdgeInsets.all(20.0),
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          navigateResetToLogin(
+                            context,
+                            initialUsername: _username,
+                          );
                         },
                         child: Text(
                           'Cancel',
@@ -93,6 +111,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   TextFormField _buildUsernameField() {
     return TextFormField(
+      initialValue: _username,
       validator: MultiValidator([
         EmailValidator(errorText: 'Email is invalid'),
         RequiredValidator(errorText: 'Email is required'),
@@ -101,40 +120,68 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         _username = value.trim();
       },
       decoration: InputDecoration(
-        labelText: 'Email Or Username',
+        labelText: 'Email',
       ),
       keyboardType: TextInputType.emailAddress,
     );
   }
 
-  void _resetPassword() async {
+  Widget _buildNewPasswordField() {
+    return TextFormField(
+      validator: MultiValidator([
+        MinLengthValidator(8,
+            errorText: 'Password must contain at least 8 characters'),
+        RequiredValidator(errorText: 'Password is required'),
+      ]),
+      onSaved: (String value) {
+        _newPassword = value.trim();
+      },
+      decoration: InputDecoration(
+        labelText: 'New Password',
+      ),
+    );
+  }
+
+  TextFormField _buildConfirmCodeField() {
+    return TextFormField(
+      validator: MultiValidator([
+        RequiredValidator(errorText: 'Code is required'),
+      ]),
+      onSaved: (String value) {
+        _confirmCode = value.trim();
+      },
+      decoration: InputDecoration(
+        labelText: 'Confirm Code',
+      ),
+    );
+  }
+
+  void _passwordConfirm() async {
     try {
       EasyLoading.show(status: 'loading...');
-      await Amplify.Auth.resetPassword(
-        username: _username,
+
+      await Amplify.Auth.confirmPassword(
+          username: _username,
+          newPassword: _newPassword,
+          confirmationCode: _confirmCode);
+      showSuccessAlert(
+        context: context,
+        desc: 'You have reset password successfully',
+        buttonText: 'To Login',
+        onPressed: () {
+          navigateResetToLogin(context, initialUsername: _username);
+        },
       );
-      _passwordConfirm();
     } on AuthError catch (ex) {
       print('Sign up error: ' + ex.cause);
       showErrorAlert(
         context: context,
-        title: 'Sign up failed',
+        title: 'Password confirm failed',
         desc: ex.exceptionList.first.detail.toString(),
       );
     } finally {
       EasyLoading.dismiss();
     }
     return null;
-  }
-
-  void _passwordConfirm() {
-    showInfoAlert(
-      context: context,
-      desc: 'Please check your email for the verification code',
-      buttonText: 'To Confirm',
-      onPressed: () {
-        navigateReplaceToPasswordConfirm(context, initialUsername: _username);
-      },
-    );
   }
 }

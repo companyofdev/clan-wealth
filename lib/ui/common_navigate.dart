@@ -1,6 +1,7 @@
 import 'package:clan_wealth/ui/page/forgot_password_page.dart';
 import 'package:clan_wealth/ui/page/login_page.dart';
 import 'package:clan_wealth/ui/page/master_page.dart';
+import 'package:clan_wealth/ui/page/password_confirm_page.dart';
 import 'package:clan_wealth/ui/page/signup_confirm_page.dart';
 import 'package:clan_wealth/ui/page/signup_page.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,17 @@ void navigatePushToForgotPassword(BuildContext context) {
   Navigator.of(context).push(
     MaterialPageRoute(
       builder: (context) => ForgotPasswordPage(),
+    ),
+  );
+}
+
+void navigateReplaceToPasswordConfirm(BuildContext context,
+    {String initialUsername}) {
+  Navigator.of(context).pushReplacement(
+    MaterialPageRoute(
+      builder: (context) => PasswordConfirmPage(
+        initialUsername: initialUsername,
+      ),
     ),
   );
 }
