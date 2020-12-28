@@ -1,5 +1,3 @@
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_core/amplify_core.dart';
 import 'package:clan_wealth/ui/common_alerts.dart';
 import 'package:clan_wealth/ui/common_navigate.dart';
 import 'package:clan_wealth/ui/validator/confirm_value_validator.dart';
@@ -151,33 +149,33 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void _signUp() async {
-    try {
-      EasyLoading.show(status: 'loading...');
-
-      Map<String, dynamic> userAttributes = {
-        "email": _username,
-      };
-
-      SignUpResult res = await Amplify.Auth.signUp(
-        username: _username,
-        password: _password,
-        options: CognitoSignUpOptions(userAttributes: userAttributes),
-      );
-
-      if (res.isSignUpComplete) {
-        _successSignUp();
-      }
-      _signUpConfirm();
-    } on AuthError catch (ex) {
-      showErrorAlert(
-        context: context,
-        title: 'Sign up failed',
-        desc: ex.exceptionList.first.detail.toString(),
-      );
-    } finally {
-      EasyLoading.dismiss();
-    }
-    return null;
+    // try {
+    //   EasyLoading.show(status: 'loading...');
+    //
+    //   Map<String, dynamic> userAttributes = {
+    //     "email": _username,
+    //   };
+    //
+    //   SignUpResult res = await Amplify.Auth.signUp(
+    //     username: _username,
+    //     password: _password,
+    //     options: CognitoSignUpOptions(userAttributes: userAttributes),
+    //   );
+    //
+    //   if (res.isSignUpComplete) {
+    //     _successSignUp();
+    //   }
+    //   _signUpConfirm();
+    // } on AuthError catch (ex) {
+    //   showErrorAlert(
+    //     context: context,
+    //     title: 'Sign up failed',
+    //     desc: ex.exceptionList.first.detail.toString(),
+    //   );
+    // } finally {
+    //   EasyLoading.dismiss();
+    // }
+    // return null;
   }
 
   void _successSignUp() {

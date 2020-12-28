@@ -1,5 +1,3 @@
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_core/amplify_core.dart';
 import 'package:clan_wealth/ui/common_navigate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -93,11 +91,11 @@ class SettingsPage extends StatelessWidget {
   }
 
   _signOut(BuildContext context) async {
-    try {
-      await Amplify.Auth.signOut();
-      navigateResetToLogin(context);
-    } on AuthError catch (err) {
-      print('Sign out error:' + err.toString());
-    }
+    // try {
+    //   await Amplify.Auth.signOut();
+    //   navigateResetToLogin(context);
+    // } on AuthError catch (err) {
+    //   print('Sign out error:' + err.toString());
+    // }
   }
 }

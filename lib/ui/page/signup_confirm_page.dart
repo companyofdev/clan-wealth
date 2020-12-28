@@ -1,5 +1,3 @@
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_core/amplify_core.dart';
 import 'package:clan_wealth/ui/common_alerts.dart';
 import 'package:clan_wealth/ui/common_navigate.dart';
 import 'package:flutter/material.dart';
@@ -139,35 +137,35 @@ class _SignUpConfirmPageState extends State<SignUpConfirmPage> {
   }
 
   void _signUpConfirm() async {
-    try {
-      EasyLoading.show(status: 'loading...');
-
-      SignUpResult res = await Amplify.Auth.confirmSignUp(
-        username: _username,
-        confirmationCode: _confirmCode,
-      );
-      print(res.nextStep.codeDeliveryDetails.deliveryMedium);
-      print(res.nextStep.additionalInfo.toString());
-      if (res.isSignUpComplete) {
-        showSuccessAlert(
-          context: context,
-          desc: 'You have signed up successfully',
-          buttonText: 'To Login',
-          onPressed: () {
-            navigateResetToLogin(context, initialUsername: _username);
-          },
-        );
-      }
-    } on AuthError catch (ex) {
-      print('Sign up error: ' + ex.cause);
-      showErrorAlert(
-        context: context,
-        title: 'Sign up confirm failed',
-        desc: ex.exceptionList.first.detail.toString(),
-      );
-    } finally {
-      EasyLoading.dismiss();
-    }
-    return null;
+    // try {
+    //   EasyLoading.show(status: 'loading...');
+    //
+    //   SignUpResult res = await Amplify.Auth.confirmSignUp(
+    //     username: _username,
+    //     confirmationCode: _confirmCode,
+    //   );
+    //   print(res.nextStep.codeDeliveryDetails.deliveryMedium);
+    //   print(res.nextStep.additionalInfo.toString());
+    //   if (res.isSignUpComplete) {
+    //     showSuccessAlert(
+    //       context: context,
+    //       desc: 'You have signed up successfully',
+    //       buttonText: 'To Login',
+    //       onPressed: () {
+    //         navigateResetToLogin(context, initialUsername: _username);
+    //       },
+    //     );
+    //   }
+    // } on AuthError catch (ex) {
+    //   print('Sign up error: ' + ex.cause);
+    //   showErrorAlert(
+    //     context: context,
+    //     title: 'Sign up confirm failed',
+    //     desc: ex.exceptionList.first.detail.toString(),
+    //   );
+    // } finally {
+    //   EasyLoading.dismiss();
+    // }
+    // return null;
   }
 }

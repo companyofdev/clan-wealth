@@ -1,5 +1,3 @@
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_core/amplify_core.dart';
 import 'package:clan_wealth/ui/common_alerts.dart';
 import 'package:clan_wealth/ui/common_navigate.dart';
 import 'package:flutter/material.dart';
@@ -144,25 +142,25 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _signIn() async {
-    try {
-      EasyLoading.show(status: 'loading...');
-      SignInResult res = await Amplify.Auth.signIn(
-        username: _username,
-        password: _password,
-      );
-      if (res.isSignedIn) {
-        navigateResetToHome(context);
-      }
-    } on AuthError catch (ex) {
-      print('Sign in error: ' + ex.cause);
-      showErrorAlert(
-        context: context,
-        title: 'Sign in failed',
-        desc: ex.exceptionList.first.detail.toString(),
-      );
-    } finally {
-      EasyLoading.dismiss();
-    }
-    return null;
+    // try {
+    //   EasyLoading.show(status: 'loading...');
+    //   SignInResult res = await Amplify.Auth.signIn(
+    //     username: _username,
+    //     password: _password,
+    //   );
+    //   if (res.isSignedIn) {
+    //     navigateResetToHome(context);
+    //   }
+    // } on AuthError catch (ex) {
+    //   print('Sign in error: ' + ex.cause);
+    //   showErrorAlert(
+    //     context: context,
+    //     title: 'Sign in failed',
+    //     desc: ex.exceptionList.first.detail.toString(),
+    //   );
+    // } finally {
+    //   EasyLoading.dismiss();
+    // }
+    // return null;
   }
 }

@@ -1,5 +1,3 @@
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_core/amplify_core.dart';
 import 'package:clan_wealth/ui/common_alerts.dart';
 import 'package:clan_wealth/ui/common_navigate.dart';
 import 'package:flutter/material.dart';
@@ -157,31 +155,31 @@ class _PasswordConfirmPageState extends State<PasswordConfirmPage> {
   }
 
   void _passwordConfirm() async {
-    try {
-      EasyLoading.show(status: 'loading...');
-
-      await Amplify.Auth.confirmPassword(
-          username: _username,
-          newPassword: _newPassword,
-          confirmationCode: _confirmCode);
-      showSuccessAlert(
-        context: context,
-        desc: 'You have reset password successfully',
-        buttonText: 'To Login',
-        onPressed: () {
-          navigateResetToLogin(context, initialUsername: _username);
-        },
-      );
-    } on AuthError catch (ex) {
-      print('Sign up error: ' + ex.cause);
-      showErrorAlert(
-        context: context,
-        title: 'Password confirm failed',
-        desc: ex.exceptionList.first.detail.toString(),
-      );
-    } finally {
-      EasyLoading.dismiss();
-    }
-    return null;
+    // try {
+    //   EasyLoading.show(status: 'loading...');
+    //
+    //   await Amplify.Auth.confirmPassword(
+    //       username: _username,
+    //       newPassword: _newPassword,
+    //       confirmationCode: _confirmCode);
+    //   showSuccessAlert(
+    //     context: context,
+    //     desc: 'You have reset password successfully',
+    //     buttonText: 'To Login',
+    //     onPressed: () {
+    //       navigateResetToLogin(context, initialUsername: _username);
+    //     },
+    //   );
+    // } on AuthError catch (ex) {
+    //   print('Sign up error: ' + ex.cause);
+    //   showErrorAlert(
+    //     context: context,
+    //     title: 'Password confirm failed',
+    //     desc: ex.exceptionList.first.detail.toString(),
+    //   );
+    // } finally {
+    //   EasyLoading.dismiss();
+    // }
+    // return null;
   }
 }
