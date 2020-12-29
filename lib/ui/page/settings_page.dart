@@ -1,7 +1,10 @@
+import 'package:clan_wealth/service/firebase_auth_service.dart';
+import 'package:clan_wealth/ui/common_alerts.dart';
 import 'package:clan_wealth/ui/common_navigate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 // Copy style from https://www.youtube.com/watch?v=gzfJaDt9ok8
 class SettingsPage extends StatelessWidget {
@@ -91,11 +94,17 @@ class SettingsPage extends StatelessWidget {
   }
 
   _signOut(BuildContext context) async {
-    // try {
-    //   await Amplify.Auth.signOut();
-    //   navigateResetToLogin(context);
-    // } on AuthError catch (err) {
-    //   print('Sign out error:' + err.toString());
-    // }
+    context
+        .read<FirebaseAuthService>()
+        .signOut()
+        .then(
+          (value) => navigateResetToLogin(context),
+        )
+        .catchError(
+          () => showErrorAlert(
+            context: context,
+            desc: 'Sign out error',
+          ),
+        );
   }
 }

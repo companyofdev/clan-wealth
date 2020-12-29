@@ -54,7 +54,6 @@ class FirebaseAuthService {
   }
 
   Future<void> signOut() {
-    // TODO: implement signOut
-    throw UnimplementedError();
+    return _firebaseAUth.signOut();
   }
 }
