@@ -1,4 +1,4 @@
-import 'package:clan_wealth/service/firebase_auth_service.dart';
+import 'package:clan_wealth/service/auth_service.dart';
 import 'package:clan_wealth/ui/common_alerts.dart';
 import 'package:clan_wealth/ui/common_navigate.dart';
 import 'package:clan_wealth/ui/validator/confirm_value_validator.dart';
@@ -56,12 +56,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       _buildPasswordField(),
                       _buildConfirmPasswordField(),
                       SizedBox(height: 50.0),
-                      TextButton(
-                        onPressed: () {
-                          navigateReplaceToSignUpConfirm(context);
-                        },
-                        child: Text('Sign Up Confirm?'),
-                      ),
                       RaisedButton(
                         padding: EdgeInsets.all(20.0),
                         onPressed: () {
@@ -155,7 +149,7 @@ class _SignUpPageState extends State<SignUpPage> {
     EasyLoading.show(status: 'loading...');
     try {
       await context
-          .read<FirebaseAuthService>()
+          .read<AuthService>()
           .registerUserInWithEmailAndPassword(_email, _password);
       _successSignUp();
     } on FirebaseAuthException catch (error) {

@@ -1,4 +1,4 @@
-import 'package:clan_wealth/service/firebase_auth_service.dart';
+import 'package:clan_wealth/service/auth_service.dart';
 import 'package:clan_wealth/ui/common_alerts.dart';
 import 'package:clan_wealth/ui/common_navigate.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -109,7 +109,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   void _resetPassword() async {
     try {
-      await context.read<FirebaseAuthService>().sendPasswordResetEmail(_email);
+      await context.read<AuthService>().sendPasswordResetEmail(_email);
       _passwordConfirm();
     } on FirebaseAuthException catch (error) {
       print('Reset password error: ${error.message}');

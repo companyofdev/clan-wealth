@@ -1,4 +1,4 @@
-import 'package:clan_wealth/service/firebase_auth_service.dart';
+import 'package:clan_wealth/service/auth_service.dart';
 import 'package:clan_wealth/ui/common_alerts.dart';
 import 'package:clan_wealth/ui/common_navigate.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -96,7 +96,7 @@ class SettingsPage extends StatelessWidget {
 
   _signOut(BuildContext context) async {
     try {
-      await context.read<FirebaseAuthService>().signOut();
+      await context.read<AuthService>().signOut();
       navigateResetToLogin(context);
     } on FirebaseAuthException catch (error) {
       print('Sign out error: ${error.message}');

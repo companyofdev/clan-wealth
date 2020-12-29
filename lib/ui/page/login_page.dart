@@ -1,4 +1,4 @@
-import 'package:clan_wealth/service/firebase_auth_service.dart';
+import 'package:clan_wealth/service/auth_service.dart';
 import 'package:clan_wealth/ui/common_alerts.dart';
 import 'package:clan_wealth/ui/common_navigate.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -148,7 +148,7 @@ class _LoginPageState extends State<LoginPage> {
     EasyLoading.show(status: 'loading...');
     try {
       await context
-          .read<FirebaseAuthService>()
+          .read<AuthService>()
           .signInWithEmailAndPassword(_email, _password);
       navigateResetToHome(context);
     } on FirebaseAuthException catch (error) {

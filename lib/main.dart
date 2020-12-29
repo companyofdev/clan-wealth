@@ -1,7 +1,9 @@
-import 'package:clan_wealth/service/firebase_auth_service.dart';
+import 'package:clan_wealth/service/auth_service.dart';
+import 'package:clan_wealth/service/store_service.dart';
 import 'package:clan_wealth/ui/page/login_page.dart';
 import 'package:clan_wealth/ui/page/master_page.dart';
 import 'package:clan_wealth/persistent/wealth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -25,12 +27,14 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<WealthDatabase>(create: (_) => WealthDatabase()),
-        Provider<FirebaseAuthService>(
-          create: (_) => FirebaseAuthService(FirebaseAuth.instance),
+        Provider<AuthService>(
+          create: (_) => AuthService(FirebaseAuth.instance),
+        ),
+        Provider<StoreService>(
+          create: (_) => StoreService(FirebaseFirestore.instance),
         ),
         StreamProvider(
-            create: (context) =>
-                context.read<FirebaseAuthService>().authStateChanges),
+            create: (context) => context.read<AuthService>().authStateChanges),
       ],
       child: MaterialApp(
         title: 'Clan of Wealth',
