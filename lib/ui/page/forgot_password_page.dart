@@ -1,9 +1,11 @@
+import 'package:clan_wealth/service/firebase_auth_service.dart';
 import 'package:clan_wealth/ui/common_alerts.dart';
 import 'package:clan_wealth/ui/common_navigate.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:provider/provider.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   @override
@@ -12,7 +14,7 @@ class ForgotPasswordPage extends StatefulWidget {
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String _username;
+  String _email;
 
   @override
   Widget build(BuildContext context) {
@@ -96,42 +98,36 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         RequiredValidator(errorText: 'Email is required'),
       ]),
       onSaved: (String value) {
-        _username = value.trim();
+        _email = value.trim();
       },
       decoration: InputDecoration(
-        labelText: 'Email Or Username',
+        labelText: 'Email',
       ),
       keyboardType: TextInputType.emailAddress,
     );
   }
 
   void _resetPassword() async {
-    // try {
-    //   EasyLoading.show(status: 'loading...');
-    //   await Amplify.Auth.resetPassword(
-    //     username: _username,
-    //   );
-    //   _passwordConfirm();
-    // } on AuthError catch (ex) {
-    //   print('Sign up error: ' + ex.cause);
-    //   showErrorAlert(
-    //     context: context,
-    //     title: 'Sign up failed',
-    //     desc: ex.exceptionList.first.detail.toString(),
-    //   );
-    // } finally {
-    //   EasyLoading.dismiss();
-    // }
-    // return null;
+    try {
+      await context.read<FirebaseAuthService>().sendPasswordResetEmail(_email);
+      _passwordConfirm();
+    } on FirebaseAuthException catch (error) {
+      print('Reset password error: ${error.message}');
+      showErrorAlert(
+        context: context,
+        title: 'Reset password failed',
+        desc: error.message,
+      );
+    }
   }
 
   void _passwordConfirm() {
     showInfoAlert(
       context: context,
-      desc: 'Please check your email for the verification code',
-      buttonText: 'To Confirm',
+      desc: 'Please check your inbox for the reset password email',
+      buttonText: 'OK',
       onPressed: () {
-        navigateReplaceToPasswordConfirm(context, initialUsername: _username);
+        navigateResetToLogin(context, initialUsername: _email);
       },
     );
   }

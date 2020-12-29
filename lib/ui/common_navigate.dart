@@ -27,6 +27,17 @@ navigateReplaceToSignUpConfirm(context, {String initialUsername}) {
   );
 }
 
+navigatePushToSignUpConfirm(context, {String initialUsername}) {
+  EasyLoading.dismiss();
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (context) => SignUpConfirmPage(
+        initialUsername: initialUsername,
+      ),
+    ),
+  );
+}
+
 void navigatePushToForgotPassword(BuildContext context) {
   EasyLoading.dismiss();
   Navigator.of(context).push(

@@ -21,9 +21,8 @@ class FirebaseAuthService {
         email: email, password: password);
   }
 
-  Future<User> sendPasswordResetEmail(String email) {
-    // TODO: implement sendPasswordResetEmail
-    throw UnimplementedError();
+  Future<void> sendPasswordResetEmail(String email) {
+    return _firebaseAUth.sendPasswordResetEmail(email: email);
   }
 
   Future<User> signInAnonymously() {

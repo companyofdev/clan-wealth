@@ -28,22 +28,8 @@ class _MasterPageState extends State<MasterPage> {
     super.initState();
   }
 
-  _listenAuth(BuildContext context) {
-    User _authUser = context.watch<User>();
-    if (_authUser == null) {
-      showInfoAlert(
-        context: context,
-        title: 'Session is expired!',
-        onPressed: () {
-          navigateResetToLogin(context);
-        },
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    _listenAuth(context);
     return Scaffold(
       body: PageView(
         controller: _pageController,
