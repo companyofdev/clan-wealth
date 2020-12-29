@@ -5,9 +5,8 @@ class FirebaseAuthService {
 
   FirebaseAuthService(this._firebaseAUth);
 
-  Future<User> currentUser() {
-    // TODO: implement currentUser
-    throw UnimplementedError();
+  User currentUser() {
+    return _firebaseAUth.currentUser;
   }
 
   void dispose() {
@@ -16,10 +15,10 @@ class FirebaseAuthService {
 
   Stream<User> get authStateChanges => _firebaseAUth.authStateChanges();
 
-  Future<User> registerUserInWithEmailAndPassword(
+  Future<UserCredential> registerUserInWithEmailAndPassword(
       String email, String password) {
-    // TODO: implement registerUserInWithEmailAndPassword
-    throw UnimplementedError();
+    return _firebaseAUth.createUserWithEmailAndPassword(
+        email: email, password: password);
   }
 
   Future<User> sendPasswordResetEmail(String email) {

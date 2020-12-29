@@ -1,6 +1,7 @@
 import 'package:clan_wealth/service/firebase_auth_service.dart';
 import 'package:clan_wealth/ui/common_alerts.dart';
 import 'package:clan_wealth/ui/common_navigate.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -94,17 +95,15 @@ class SettingsPage extends StatelessWidget {
   }
 
   _signOut(BuildContext context) async {
-    context
-        .read<FirebaseAuthService>()
-        .signOut()
-        .then(
-          (value) => navigateResetToLogin(context),
-        )
-        .catchError(
-          () => showErrorAlert(
-            context: context,
-            desc: 'Sign out error',
-          ),
-        );
+    try {
+      await context.read<FirebaseAuthService>().signOut();
+      navigateResetToLogin(context);
+    } on FirebaseAuthException catch (error) {
+      print('Sign out error: ${error.message}');
+      showErrorAlert(
+        context: context,
+        desc: error.message,
+      );
+    }
   }
 }

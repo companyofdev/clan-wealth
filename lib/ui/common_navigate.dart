@@ -5,8 +5,10 @@ import 'package:clan_wealth/ui/page/password_confirm_page.dart';
 import 'package:clan_wealth/ui/page/signup_confirm_page.dart';
 import 'package:clan_wealth/ui/page/signup_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void navigatePushToSignUp(BuildContext context) {
+  EasyLoading.dismiss();
   Navigator.of(context).push(
     MaterialPageRoute(
       builder: (context) => SignUpPage(),
@@ -15,6 +17,7 @@ void navigatePushToSignUp(BuildContext context) {
 }
 
 navigateReplaceToSignUpConfirm(context, {String initialUsername}) {
+  EasyLoading.dismiss();
   Navigator.of(context).pushReplacement(
     MaterialPageRoute(
       builder: (context) => SignUpConfirmPage(
@@ -25,6 +28,7 @@ navigateReplaceToSignUpConfirm(context, {String initialUsername}) {
 }
 
 void navigatePushToForgotPassword(BuildContext context) {
+  EasyLoading.dismiss();
   Navigator.of(context).push(
     MaterialPageRoute(
       builder: (context) => ForgotPasswordPage(),
@@ -34,6 +38,7 @@ void navigatePushToForgotPassword(BuildContext context) {
 
 void navigateReplaceToPasswordConfirm(BuildContext context,
     {String initialUsername}) {
+  EasyLoading.dismiss();
   Navigator.of(context).pushReplacement(
     MaterialPageRoute(
       builder: (context) => PasswordConfirmPage(
@@ -44,6 +49,7 @@ void navigateReplaceToPasswordConfirm(BuildContext context,
 }
 
 void navigateResetToLogin(BuildContext context, {String initialUsername}) {
+  EasyLoading.dismiss();
   Navigator.of(context).pushAndRemoveUntil(
     MaterialPageRoute(
       builder: (context) => LoginPage(
@@ -55,6 +61,7 @@ void navigateResetToLogin(BuildContext context, {String initialUsername}) {
 }
 
 void navigateResetToHome(BuildContext context) {
+  EasyLoading.dismiss();
   Navigator.of(context).pushAndRemoveUntil(
     MaterialPageRoute(
       builder: (context) => MasterPage(),

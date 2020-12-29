@@ -1,10 +1,13 @@
+import 'package:clan_wealth/service/firebase_auth_service.dart';
 import 'package:clan_wealth/ui/common_alerts.dart';
 import 'package:clan_wealth/ui/common_navigate.dart';
 import 'package:clan_wealth/ui/validator/confirm_value_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:provider/provider.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -16,7 +19,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final GlobalKey<FormFieldState> _passwordFieldKey =
       GlobalKey<FormFieldState>();
 
-  String _username;
+  String _email;
   String _password;
 
   @override
@@ -109,7 +112,7 @@ class _SignUpPageState extends State<SignUpPage> {
         RequiredValidator(errorText: 'Email is required'),
       ]),
       onSaved: (String value) {
-        _username = value.trim();
+        _email = value.trim();
       },
       decoration: InputDecoration(
         labelText: 'Email',
@@ -122,8 +125,8 @@ class _SignUpPageState extends State<SignUpPage> {
     return TextFormField(
       key: _passwordFieldKey,
       validator: MultiValidator([
-        MinLengthValidator(8,
-            errorText: 'Password must contain at least 8 characters'),
+        MinLengthValidator(6,
+            errorText: 'Password must contain at least 6 characters'),
         RequiredValidator(errorText: 'Password is required'),
       ]),
       onSaved: (String value) {
@@ -149,33 +152,20 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void _signUp() async {
-    // try {
-    //   EasyLoading.show(status: 'loading...');
-    //
-    //   Map<String, dynamic> userAttributes = {
-    //     "email": _username,
-    //   };
-    //
-    //   SignUpResult res = await Amplify.Auth.signUp(
-    //     username: _username,
-    //     password: _password,
-    //     options: CognitoSignUpOptions(userAttributes: userAttributes),
-    //   );
-    //
-    //   if (res.isSignUpComplete) {
-    //     _successSignUp();
-    //   }
-    //   _signUpConfirm();
-    // } on AuthError catch (ex) {
-    //   showErrorAlert(
-    //     context: context,
-    //     title: 'Sign up failed',
-    //     desc: ex.exceptionList.first.detail.toString(),
-    //   );
-    // } finally {
-    //   EasyLoading.dismiss();
-    // }
-    // return null;
+    EasyLoading.show(status: 'loading...');
+    try {
+      await context
+          .read<FirebaseAuthService>()
+          .registerUserInWithEmailAndPassword(_email, _password);
+      _successSignUp();
+    } on FirebaseAuthException catch (error) {
+      print('Sign up error: ${error.message}');
+      showErrorAlert(
+        context: context,
+        title: 'Sign up failed',
+        desc: error.message,
+      );
+    }
   }
 
   void _successSignUp() {
@@ -184,18 +174,7 @@ class _SignUpPageState extends State<SignUpPage> {
       desc: 'You have signed up successfully',
       buttonText: 'To Login',
       onPressed: () {
-        navigateResetToLogin(context, initialUsername: _username);
-      },
-    );
-  }
-
-  void _signUpConfirm() {
-    showInfoAlert(
-      context: context,
-      desc: 'Please check your email for the verification code',
-      buttonText: 'To Verify Email',
-      onPressed: () {
-        navigateReplaceToSignUpConfirm(context, initialUsername: _username);
+        navigateResetToLogin(context, initialUsername: _email);
       },
     );
   }

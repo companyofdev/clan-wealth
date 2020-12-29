@@ -1,9 +1,13 @@
+import 'package:clan_wealth/service/firebase_auth_service.dart';
+import 'package:clan_wealth/ui/common_alerts.dart';
+import 'package:clan_wealth/ui/common_navigate.dart';
 import 'package:clan_wealth/ui/page/clan_wealth_page.dart';
-import 'package:clan_wealth/ui/page/login_page.dart';
 import 'package:clan_wealth/ui/page/your_wealth_page.dart';
 import 'package:clan_wealth/ui/page/wealth_edit_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class MasterPage extends StatefulWidget {
   @override
@@ -24,17 +28,22 @@ class _MasterPageState extends State<MasterPage> {
     super.initState();
   }
 
-  void _navigateLoginPage(BuildContext context) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => LoginPage(),
-      ),
-    );
+  _listenAuth(BuildContext context) {
+    User _authUser = context.watch<User>();
+    if (_authUser == null) {
+      showInfoAlert(
+        context: context,
+        title: 'Session is expired!',
+        onPressed: () {
+          navigateResetToLogin(context);
+        },
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    _listenAuth(context);
     return Scaffold(
       body: PageView(
         controller: _pageController,

@@ -1,6 +1,7 @@
 import 'package:clan_wealth/service/firebase_auth_service.dart';
 import 'package:clan_wealth/ui/common_alerts.dart';
 import 'package:clan_wealth/ui/common_navigate.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -144,19 +145,19 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _signIn() async {
-    var authService = context.read<FirebaseAuthService>();
     EasyLoading.show(status: 'loading...');
-    var signInResult =
-        authService.signInWithEmailAndPassword(_email, _password);
-    signInResult.then((credential) {
+    try {
+      await context
+          .read<FirebaseAuthService>()
+          .signInWithEmailAndPassword(_email, _password);
       navigateResetToHome(context);
-    }).catchError((error) {
-      print('Sign in error: ' + error);
+    } on FirebaseAuthException catch (error) {
+      print('Login error: ${error.message}}');
       showErrorAlert(
         context: context,
-        title: 'Sign in failed',
+        title: 'Login failed',
+        desc: error.message,
       );
-    });
-    EasyLoading.dismiss();
+    }
   }
 }

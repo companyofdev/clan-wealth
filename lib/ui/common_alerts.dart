@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 const String _kDefaultErrorTitle = 'Error';
@@ -15,6 +16,7 @@ void showErrorAlert({
   String buttonText,
   Function onPressed,
 }) {
+  EasyLoading.dismiss();
   Alert(
     type: AlertType.error,
     context: context,
@@ -40,6 +42,7 @@ void showSuccessAlert({
   String buttonText,
   Function onPressed,
 }) {
+  EasyLoading.dismiss();
   Alert(
     type: AlertType.success,
     context: context,
@@ -65,6 +68,7 @@ void showInfoAlert({
   String buttonText,
   Function onPressed,
 }) {
+  EasyLoading.dismiss();
   Alert(
     type: AlertType.info,
     context: context,
