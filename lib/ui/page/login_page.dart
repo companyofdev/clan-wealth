@@ -1,9 +1,11 @@
+import 'package:clan_wealth/service/firebase_auth_service.dart';
 import 'package:clan_wealth/ui/common_alerts.dart';
 import 'package:clan_wealth/ui/common_navigate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   final String initialUsername;
@@ -17,13 +19,13 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String _username;
+  String _email;
   String _password;
 
   @override
   void initState() {
     super.initState();
-    _username = widget.initialUsername;
+    _email = widget.initialUsername;
   }
 
   @override
@@ -110,13 +112,13 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildUsernameField() {
     return TextFormField(
-      initialValue: _username,
+      initialValue: _email,
       validator: MultiValidator([
         EmailValidator(errorText: 'Email is invalid'),
         RequiredValidator(errorText: 'Email is required'),
       ]),
       onSaved: (String value) {
-        _username = value.trim();
+        _email = value.trim();
       },
       decoration: InputDecoration(
         labelText: 'Email',
@@ -128,8 +130,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildDPasswordField() {
     return TextFormField(
       validator: MultiValidator([
-        MinLengthValidator(8,
-            errorText: 'Password must contain at least 8 characters'),
+        MinLengthValidator(6,
+            errorText: 'Password must contain at least 6 characters'),
         RequiredValidator(errorText: 'Password is required'),
       ]),
       onSaved: (String value) {
@@ -142,25 +144,19 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _signIn() async {
-    // try {
-    //   EasyLoading.show(status: 'loading...');
-    //   SignInResult res = await Amplify.Auth.signIn(
-    //     username: _username,
-    //     password: _password,
-    //   );
-    //   if (res.isSignedIn) {
-    //     navigateResetToHome(context);
-    //   }
-    // } on AuthError catch (ex) {
-    //   print('Sign in error: ' + ex.cause);
-    //   showErrorAlert(
-    //     context: context,
-    //     title: 'Sign in failed',
-    //     desc: ex.exceptionList.first.detail.toString(),
-    //   );
-    // } finally {
-    //   EasyLoading.dismiss();
-    // }
-    // return null;
+    var authService = context.read<FirebaseAuthService>();
+    EasyLoading.show(status: 'loading...');
+    var signInResult =
+        authService.signInWithEmailAndPassword(_email, _password);
+    signInResult.then((credential) {
+      navigateResetToHome(context);
+    }).catchError((error) {
+      print('Sign in error: ' + error);
+      showErrorAlert(
+        context: context,
+        title: 'Sign in failed',
+      );
+    });
+    EasyLoading.dismiss();
   }
 }

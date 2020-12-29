@@ -29,6 +29,7 @@ dependencies:
 
   # Firebase
   firebase_core: ^0.5.3
+  firebase_auth: ^0.18.4+1
 
   # UI common
   rflutter_alert: ^1.1.0
@@ -38,6 +39,7 @@ dependencies:
   form_field_validator: ^1.0.1
   cupertino_icons: ^1.0.0
   font_awesome_flutter: ^8.11.0
+  loading: ^1.0.2
 
   # Formatting support libs
   intl: ^0.16.1
