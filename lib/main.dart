@@ -1,9 +1,9 @@
+import 'package:clan_wealth/provider/wealth_provider.dart';
 import 'package:clan_wealth/service/auth_service.dart';
-import 'package:clan_wealth/service/store_service.dart';
+import 'package:clan_wealth/service/wealth_service.dart';
 import 'package:clan_wealth/ui/page/login_page.dart';
 import 'package:clan_wealth/ui/page/master_page.dart';
 import 'package:clan_wealth/persistent/wealth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -28,10 +28,13 @@ class MyApp extends StatelessWidget {
       providers: [
         Provider<WealthDatabase>(create: (_) => WealthDatabase()),
         Provider<AuthService>(
-          create: (_) => AuthService(FirebaseAuth.instance),
+          create: (_) => AuthService.instance,
         ),
-        Provider<StoreService>(
-          create: (_) => StoreService(FirebaseFirestore.instance),
+        Provider<WealthService>(
+          create: (context) => WealthService.instance,
+        ),
+        ChangeNotifierProvider<WealthProvider>(
+          create: (_) => WealthProvider(),
         ),
         StreamProvider(
             create: (context) => context.read<AuthService>().authStateChanges),

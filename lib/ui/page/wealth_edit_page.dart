@@ -1,8 +1,12 @@
-import 'package:clan_wealth/persistent/wealth.dart';
+import 'package:clan_wealth/model/wealth.dart';
+import 'package:clan_wealth/service/auth_service.dart';
+import 'package:clan_wealth/service/wealth_category_service.dart';
+import 'package:clan_wealth/service/wealth_service.dart';
 import 'package:clan_wealth/ui/validator/double_validator.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -23,8 +27,8 @@ class _WealthEditPageState extends State<WealthEditPage> {
 
   String _title;
   String _description;
-  double _amount;
-  IconData _iconData = FontAwesomeIcons.landmark;
+  double _balance;
+  WealthCategory _category;
 
   Wealth _wealth;
   bool _isEditMode;
@@ -59,8 +63,8 @@ class _WealthEditPageState extends State<WealthEditPage> {
                     children: [
                       _buildTitleField(),
                       _buildDescriptionField(),
-                      _buildAmountField(),
-                      _buildIconField(),
+                      _buildCategoryField(),
+                      _buildBalanceField(),
                       SizedBox(height: 20.0),
                       ButtonBar(
                         children: [
@@ -120,26 +124,6 @@ class _WealthEditPageState extends State<WealthEditPage> {
     );
   }
 
-  _pickIcon() async {
-    IconData icon = await FlutterIconPicker.showIconPicker(
-      context,
-      adaptiveDialog: isAdaptive,
-      showTooltips: showTooltips,
-      showSearchBar: showSearch,
-      iconPickerShape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      iconPackMode: IconPack.fontAwesomeIcons,
-    );
-
-    if (icon != null) {
-      _iconData = icon;
-      setState(
-        () {},
-      );
-    }
-  }
-
   Widget _buildTitleField() {
     return TextFormField(
       initialValue: _isEditMode ? _wealth.title : '',
@@ -165,42 +149,45 @@ class _WealthEditPageState extends State<WealthEditPage> {
     );
   }
 
-  Widget _buildIconField() {
-    if (_isEditMode) {
-      _iconData = IconDataSolid(_wealth.iconCode);
-    }
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 20.0),
-      child: Row(
-        children: [
-          Text(
-            'Icon',
-            style: TextStyle(color: Colors.grey),
-          ),
-          SizedBox(width: 20.0),
-          IconButton(
-              icon: Icon(
-                _iconData,
-                size: 35.0,
+  Widget _buildCategoryField() {
+    return DropdownButtonFormField<WealthCategory>(
+      items: WealthCategoryService.getAllCategories
+          .map(
+            (item) => DropdownMenuItem<WealthCategory>(
+              child: Row(
+                children: [
+                  Icon(item.iconData),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(item.description),
+                ],
               ),
-              onPressed: _pickIcon),
-        ],
-      ),
+              value: item,
+            ),
+          )
+          .toList(),
+      onChanged: (selectedItem) {
+        _category = selectedItem;
+      },
+      onSaved: (selectedItem) {
+        _category = selectedItem;
+      },
+      value: _category,
     );
   }
 
-  Widget _buildAmountField() {
+  Widget _buildBalanceField() {
     return TextFormField(
-      initialValue: _isEditMode ? _wealth.amount.toString() : '',
       validator: MultiValidator([
-        RequiredValidator(errorText: 'Amount is required'),
-        DoubleValidator(errorText: 'Amount is invalid'),
+        RequiredValidator(errorText: 'Balance is required'),
+        DoubleValidator(errorText: 'Balance is invalid'),
       ]),
       onSaved: (String value) {
-        _amount = double.parse(value);
+        _balance = double.parse(value);
       },
       decoration: InputDecoration(
-        labelText: 'Initial Amount',
+        labelText: 'Balance',
       ),
       keyboardType: TextInputType.numberWithOptions(
         decimal: true,
@@ -210,37 +197,18 @@ class _WealthEditPageState extends State<WealthEditPage> {
   }
 
   Future<void> _addOrUpdateWealth(BuildContext context) async {
-    final wealthDatabase = context.read<WealthDatabase>();
-    final wealthDao = wealthDatabase.wealthDao;
-    final wealthHistoricalAmountDao = wealthDatabase.wealthHistoricalAmountDao;
-    String _wealthId = _isEditMode ? _wealth.id : Uuid().v4();
-    DateTime _updatedDate = DateTime.now();
-
-    if (_isEditMode) {
-      await wealthDao.updateWealth(_wealth.copyWith(
-        title: _title,
-        description: _description,
-        iconCode: _iconData.codePoint,
-        amount: _amount,
-        updatedDate: _updatedDate,
-      ));
-    } else {
-      await wealthDao.insertWealth(Wealth(
-        id: _wealthId,
-        title: _title,
-        description: _description,
-        amount: _amount,
-        iconCode: _iconData.codePoint,
-        updatedDate: _updatedDate,
-      ));
-    }
-
-    WealthHistoricalAmount historicalAmount = WealthHistoricalAmount(
-      wealthId: _wealthId,
-      amount: _amount,
+    String _wealthId = Uuid().v4();
+    User _authUser = context.read<AuthService>().currentUser();
+    Timestamp _updatedDate = Timestamp.now();
+    Wealth _wealth = Wealth(
+      id: _wealthId,
+      title: _title,
+      description: _description,
+      category: _category.name,
+      ownerId: _authUser.uid,
       updatedDate: _updatedDate,
+      aggregate: Aggregate(balance: _balance),
     );
-    await wealthHistoricalAmountDao
-        .insertWealthHistoricalAmount(historicalAmount);
+    context.read<WealthService>().upsert(_wealth);
   }
 }

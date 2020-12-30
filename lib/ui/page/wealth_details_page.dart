@@ -1,4 +1,4 @@
-import 'package:clan_wealth/persistent/wealth.dart';
+import 'package:clan_wealth/model/wealth.dart';
 import 'package:clan_wealth/ui/components/wealth_amount_changed_indicator.dart';
 import 'package:clan_wealth/ui/validator/double_validator.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +33,6 @@ class _WealthDetailsPageState extends State<WealthDetailsPage> {
 
   Widget _buildAmountField() {
     return TextFormField(
-      initialValue: _wealth.amount.toString(),
       validator: MultiValidator([
         RequiredValidator(errorText: 'Amount is required'),
         DoubleValidator(errorText: 'Amount is invalid'),
@@ -100,22 +99,7 @@ class _WealthDetailsPageState extends State<WealthDetailsPage> {
   }
 
   Future<void> _updateWealthAmount(BuildContext context) async {
-    final wealthDatabase = context.read<WealthDatabase>();
-    final wealthDao = wealthDatabase.wealthDao;
-    final wealthHistoricalAmountDao = wealthDatabase.wealthHistoricalAmountDao;
-
-    DateTime _updatedDate = DateTime.now();
-    _wealth = _wealth.copyWith(amount: _amount, updatedDate: _updatedDate);
-    await wealthDao.updateWealth(_wealth);
-    setState(() {});
-
-    WealthHistoricalAmount historicalAmount = WealthHistoricalAmount(
-      wealthId: _wealth.id,
-      amount: _amount,
-      updatedDate: _updatedDate,
-    );
-    await wealthHistoricalAmountDao
-        .insertWealthHistoricalAmount(historicalAmount);
+    // TODO
   }
 
   @override
@@ -131,7 +115,7 @@ class _WealthDetailsPageState extends State<WealthDetailsPage> {
         children: [
           Icon(FontAwesomeIcons.dollarSign, size: 14.0),
           Text(
-            _numberFormat.format(_wealth.amount),
+            '10.0',
             style: TextStyle(fontSize: 20.0),
           ),
         ],
@@ -143,7 +127,7 @@ class _WealthDetailsPageState extends State<WealthDetailsPage> {
       children: <Widget>[
         SizedBox(height: 100.0),
         Icon(
-          IconDataSolid(_wealth.iconCode),
+          FontAwesomeIcons.landmark,
           color: Colors.white,
           size: 40.0,
         ),

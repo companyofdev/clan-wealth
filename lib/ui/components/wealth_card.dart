@@ -1,4 +1,4 @@
-import 'package:clan_wealth/persistent/wealth.dart';
+import 'package:clan_wealth/model/wealth.dart';
 import 'package:clan_wealth/ui/colors.dart';
 import 'package:clan_wealth/ui/components/wealth_tile.dart';
 import 'package:flutter/material.dart';

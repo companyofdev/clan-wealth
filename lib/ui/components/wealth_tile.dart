@@ -1,4 +1,4 @@
-import 'package:clan_wealth/persistent/wealth.dart';
+import 'package:clan_wealth/model/wealth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -29,7 +29,7 @@ class WealthTile extends StatelessWidget {
           ),
         ),
         child: Icon(
-          IconDataSolid(wealth.iconCode),
+          FontAwesomeIcons.landmark,
           color: Colors.white,
           size: 30.0,
         ),
@@ -57,7 +57,7 @@ class WealthTile extends StatelessWidget {
   _buildUpdatedDate() {
     return Row(
       children: [
-        Text(_dateFormat.format(wealth.updatedDate)),
+        Text(_dateFormat.format(wealth.updatedDate.toDate())),
       ],
     );
   }
@@ -66,7 +66,7 @@ class WealthTile extends StatelessWidget {
     return Row(
       children: [
         Icon(FontAwesomeIcons.dollarSign, size: 14.0),
-        Text(_numberFormat.format(wealth.amount)),
+        Text('10.0'),
       ],
     );
   }

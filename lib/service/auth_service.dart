@@ -1,28 +1,36 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
-  final FirebaseAuth _firebaseAUth;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  AuthService(this._firebaseAUth);
+  static final AuthService _instance = AuthService._internal();
+
+  factory AuthService() {
+    return _instance;
+  }
+
+  static AuthService get instance => _instance;
+
+  AuthService._internal();
 
   User currentUser() {
-    return _firebaseAUth.currentUser;
+    return _firebaseAuth.currentUser;
   }
 
   void dispose() {
     // TODO: implement dispose
   }
 
-  Stream<User> get authStateChanges => _firebaseAUth.authStateChanges();
+  Stream<User> get authStateChanges => _firebaseAuth.authStateChanges();
 
   Future<UserCredential> registerUserInWithEmailAndPassword(
       String email, String password) {
-    return _firebaseAUth.createUserWithEmailAndPassword(
+    return _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
   }
 
   Future<void> sendPasswordResetEmail(String email) {
-    return _firebaseAUth.sendPasswordResetEmail(email: email);
+    return _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
   Future<User> signInAnonymously() {
@@ -33,7 +41,7 @@ class AuthService {
   Future<UserCredential> signInWithEmailAndPassword(
       String email, String password) async {
     try {
-      return _firebaseAUth.signInWithEmailAndPassword(
+      return _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
     } on FirebaseAuthException catch (err) {
       print('signInWithEmailAndPassword error: $err');
@@ -52,6 +60,6 @@ class AuthService {
   }
 
   Future<void> signOut() {
-    return _firebaseAUth.signOut();
+    return _firebaseAuth.signOut();
   }
 }
