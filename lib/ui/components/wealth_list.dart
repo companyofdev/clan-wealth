@@ -5,7 +5,6 @@ import 'package:clan_wealth/ui/page/wealth_details_page.dart';
 import 'package:clan_wealth/ui/page/wealth_edit_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:loading/indicator/ball_pulse_indicator.dart';
 import 'package:loading/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +26,7 @@ class WealthList extends StatelessWidget {
           return _buildListView(_wealths, context, _wealthProvider);
         }
         return Center(
-          child: Loading(indicator: BallPulseIndicator(), size: 100.0),
+          child: Loading(size: 100.0),
         );
       },
       stream: _wealthProvider.wealths,

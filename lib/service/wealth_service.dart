@@ -23,7 +23,7 @@ class WealthService {
     return _fireStore
         .collection(kWealthCollectionName)
         .where('ownerId', isEqualTo: _ownerId)
-        .snapshots(includeMetadataChanges: true)
+        .snapshots()
         .map(
           (snapshot) => snapshot.docs
               .map(

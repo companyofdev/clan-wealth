@@ -20,6 +20,21 @@ class WealthProvider with ChangeNotifier {
   String get category => _category;
   Stream<List<Wealth>> get wealths => _wealthService.watchAll();
 
+  set changeTitle(String title) {
+    _title = title;
+    notifyListeners();
+  }
+
+  set changeDescription(String description) {
+    _description = description;
+    notifyListeners();
+  }
+
+  set changeCategory(String category) {
+    _category = category;
+    notifyListeners();
+  }
+
   load(Wealth _wealth) {
     if (_wealth == null) {
       _id = null;

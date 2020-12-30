@@ -39,8 +39,8 @@ class _MasterPageState extends State<MasterPage> {
             label: 'Your Wealth',
           ),
           BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.layerGroup),
-            label: 'Clan Wealth',
+            icon: Icon(FontAwesomeIcons.users),
+            label: 'Your Clan',
           ),
         ],
         onTap: _onNavigationTapped,

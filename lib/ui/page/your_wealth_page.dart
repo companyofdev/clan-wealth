@@ -1,4 +1,6 @@
-import 'package:clan_wealth/ui/screens/wealth_list_screen.dart';
+import 'package:clan_wealth/ui/components/top_banner_layout.dart';
+import 'package:clan_wealth/ui/components/wealth_aggregate.dart';
+import 'package:clan_wealth/ui/components/wealth_list.dart';
 import 'package:flutter/material.dart';
 
 class YourWealthPage extends StatefulWidget {
@@ -11,7 +13,12 @@ class _YourWealthPageState extends State<YourWealthPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return WealthListScreen();
+    return SingleChildScrollView(
+      child: TopBannerLayout(
+        topContent: WealthAggregate(),
+        bottomContent: WealthList(),
+      ),
+    );
   }
 
   @override
