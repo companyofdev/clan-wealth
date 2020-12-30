@@ -1,5 +1,6 @@
 import 'package:clan_wealth/model/wealth.dart';
 import 'package:clan_wealth/provider/wealth_provider.dart';
+import 'package:clan_wealth/ui/common_number_format.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -9,8 +10,6 @@ import 'package:provider/provider.dart';
 
 class WealthAggregate extends StatelessWidget {
   final NumberFormat _numberFormat = NumberFormat('#,###.0#', 'en_US');
-  final NumberFormat _numberFormatPercent =
-      NumberFormat.percentPattern('en_US');
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +52,8 @@ class WealthAggregate extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  _changedBalance(currentBalance, lastMonthBalance),
+                  changedBalanceText(currentBalance, lastMonthBalance,
+                      noChangeText: '--'),
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 18.0,
@@ -79,21 +79,5 @@ class WealthAggregate extends StatelessWidget {
     return _wealths
         .map((wealth) => wealth.monthlyBalance[_currentMonth]?.balance)
         .reduce((total, element) => total + element);
-  }
-
-  _changedBalance(double currentBalance, double lastMonthBalance) {
-    final changedBalance = currentBalance - lastMonthBalance;
-    final prefixSign = changedBalance > 0
-        ? '+'
-        : changedBalance < 0
-            ? '-'
-            : '';
-    final String changePercent = lastMonthBalance > 0
-        ? '${_numberFormatPercent.format(changedBalance / lastMonthBalance)}'
-        : '';
-    final changedBalanceText = changedBalance == 0
-        ? 'No change from last month'
-        : '$prefixSign${_numberFormat.format(changedBalance)}  ($changePercent)';
-    return changedBalanceText;
   }
 }

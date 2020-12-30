@@ -1,8 +1,9 @@
 import 'package:clan_wealth/model/wealth.dart';
+import 'package:clan_wealth/ui/common_number_format.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:date_format/date_format.dart';
+import 'package:jiffy/jiffy.dart';
 
 class WealthTile extends StatelessWidget {
   final Wealth wealth;
@@ -11,9 +12,9 @@ class WealthTile extends StatelessWidget {
 
   WealthTile({this.wealth, this.onTap, this.onDetailPressed});
 
-  final NumberFormat _numberFormat =
-      NumberFormat.currency(symbol: '', decimalDigits: 1);
-  final String currentMonth = formatDate(DateTime.now(), [yyyy, mm]);
+  final NumberFormat _numberFormat = NumberFormat('#,###.0#', 'en_US');
+  final String _currentMonth = Jiffy().format('yyyyMM');
+  final String _lastMonth = (Jiffy()..subtract(months: 1)).format('yyyyMM');
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +43,8 @@ class WealthTile extends StatelessWidget {
       subtitle: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildUpdatedDate(),
-          _buildAmount(),
+          _buildChangedBalance(),
+          _buildBalance(),
         ],
       ),
       trailing: IconButton(
@@ -55,19 +56,26 @@ class WealthTile extends StatelessWidget {
     );
   }
 
-  _buildUpdatedDate() {
+  _buildChangedBalance() {
+    final currentBalance = wealth.monthlyBalance[_currentMonth].balance;
+    final lastMonthBalance = wealth.monthlyBalance[_lastMonth] != null
+        ? wealth.monthlyBalance[_lastMonth].balance
+        : 0.0;
+
     return Row(
       children: [
-        Text(formatDate(wealth.updatedDate, [yyyy, '-', mm])),
+        Text(changedBalanceText(currentBalance, lastMonthBalance,
+            noChangeText: '--')),
       ],
     );
   }
 
-  _buildAmount() {
+  _buildBalance() {
     return Row(
       children: [
         Icon(FontAwesomeIcons.dollarSign, size: 14.0),
-        Text(_numberFormat.format(wealth.monthlyBalance[currentMonth].balance)),
+        Text(
+            _numberFormat.format(wealth.monthlyBalance[_currentMonth].balance)),
       ],
     );
   }
