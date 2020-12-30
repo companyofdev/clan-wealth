@@ -1,14 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'wealth.g.dart';
+
+@JsonSerializable()
 class Wealth {
   final String id;
   final String ownerId;
   final String title;
   final String description;
   final String category;
-  final Timestamp updatedDate;
-  final Aggregate aggregate;
+
+  @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeAsIs)
+  final DateTime updatedDate;
+  final Map<String, Balance> monthlyBalance;
 
   Wealth({
     @required this.id,
@@ -17,35 +23,33 @@ class Wealth {
     this.description,
     @required this.category,
     @required this.updatedDate,
-    this.aggregate,
+    this.monthlyBalance,
   });
 
-  factory Wealth.fromJson(Map<String, dynamic> json) {
-    return Wealth(
-      id: json['id'],
-      ownerId: json['ownerId'],
-      title: json['title'],
-      description: json['description'],
-      category: json['category'],
-      updatedDate: json['updatedDate'],
-      aggregate: Aggregate.fromJson(json['aggregate']),
-    );
-  }
+  factory Wealth.fromJson(Map<String, dynamic> json) => _$WealthFromJson(json);
+  Map<String, dynamic> toJson() => _$WealthToJson(this);
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'ownerId': ownerId,
-      'title': title,
-      'description': description,
-      'category': category,
-      'updatedDate': updatedDate,
-      'aggregate': aggregate.toMap(),
-    };
+  static DateTime _dateTimeAsIs(DateTime dateTime) => dateTime;
+
+  static DateTime _dateTimeFromTimestamp(Timestamp timestamp) {
+    return DateTime.parse(timestamp.toDate().toString());
   }
 }
 
-class Aggregate {
+@JsonSerializable(includeIfNull: false)
+class MonthlyBalance {
+  final String month;
+  final Balance balance;
+
+  MonthlyBalance({this.month, this.balance});
+
+  factory MonthlyBalance.fromJson(Map<String, dynamic> json) =>
+      _$MonthlyBalanceFromJson(json);
+  Map<String, dynamic> toJson() => _$MonthlyBalanceToJson(this);
+}
+
+@JsonSerializable(includeIfNull: false)
+class Balance {
   final double balance;
   final double estimateBalance;
   final double boughtPrice;
@@ -53,7 +57,7 @@ class Aggregate {
   final double maintainingFee;
   final double upgradingFee;
 
-  const Aggregate({
+  const Balance({
     @required this.balance,
     this.estimateBalance,
     this.boughtPrice,
@@ -62,25 +66,7 @@ class Aggregate {
     this.upgradingFee,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'balance': balance,
-      'estimateBalance': estimateBalance,
-      'boughtPrice': boughtPrice,
-      'boughtFee': boughtFee,
-      'maintainingFee': maintainingFee,
-      'upgradingFee': upgradingFee,
-    };
-  }
-
-  factory Aggregate.fromJson(Map<String, dynamic> json) {
-    return Aggregate(
-      balance: json['balance'],
-      estimateBalance: json['estimateBalance'],
-      boughtPrice: json['boughtPrice'],
-      boughtFee: json['boughtFee'],
-      maintainingFee: json['maintainingFee'],
-      upgradingFee: json['upgradingFee'],
-    );
-  }
+  factory Balance.fromJson(Map<String, dynamic> json) =>
+      _$BalanceFromJson(json);
+  Map<String, dynamic> toJson() => _$BalanceToJson(this);
 }

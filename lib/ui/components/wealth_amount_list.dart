@@ -1,4 +1,4 @@
-import 'package:clan_wealth/persistent/wealth.dart';
+import 'package:clan_wealth/model/wealth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -18,16 +18,12 @@ class WealthAmountList extends StatelessWidget {
     );
   }
 
-  StreamBuilder<List<WealthHistoricalAmount>> _buildWealthAmountList(
-      BuildContext context) {
-    final wealthDatabase = context.watch<WealthDatabase>();
-    final wealthHistoricalAmountDao = wealthDatabase.wealthHistoricalAmountDao;
+  StreamBuilder<List<Wealth>> _buildWealthAmountList(BuildContext context) {
     print(wealthId);
 
     return StreamBuilder(
-      stream: wealthHistoricalAmountDao
-          .watchAllWealthHistoricalAmountByWealthId(wealthId),
-      builder: (context, AsyncSnapshot<List<WealthHistoricalAmount>> snapshot) {
+      stream: null,
+      builder: (context, AsyncSnapshot<List<Wealth>> snapshot) {
         final _wealthAmounts = snapshot.data ?? List.empty();
         return ListView.builder(
           scrollDirection: Axis.vertical,
@@ -44,7 +40,7 @@ class WealthAmountList extends StatelessWidget {
                 decoration:
                     BoxDecoration(color: Color.fromRGBO(64, 75, 96, .9)),
                 child: Text(
-                  _numberFormat.format(wealthAmount.amount),
+                  _numberFormat.format(10.0),
                 ),
               ),
             );

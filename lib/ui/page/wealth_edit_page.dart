@@ -3,7 +3,6 @@ import 'package:clan_wealth/service/auth_service.dart';
 import 'package:clan_wealth/service/wealth_category_service.dart';
 import 'package:clan_wealth/service/wealth_service.dart';
 import 'package:clan_wealth/ui/validator/double_validator.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -199,7 +198,7 @@ class _WealthEditPageState extends State<WealthEditPage> {
   Future<void> _addOrUpdateWealth(BuildContext context) async {
     String _wealthId = Uuid().v4();
     User _authUser = context.read<AuthService>().currentUser();
-    Timestamp _updatedDate = Timestamp.now();
+    DateTime _updatedDate = DateTime.now();
     Wealth _wealth = Wealth(
       id: _wealthId,
       title: _title,
@@ -207,7 +206,6 @@ class _WealthEditPageState extends State<WealthEditPage> {
       category: _category.name,
       ownerId: _authUser.uid,
       updatedDate: _updatedDate,
-      aggregate: Aggregate(balance: _balance),
     );
     context.read<WealthService>().upsert(_wealth);
   }

@@ -1,4 +1,4 @@
-import 'package:clan_wealth/persistent/wealth.dart';
+import 'package:clan_wealth/model/wealth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -13,26 +13,22 @@ class WealthAmountChangedIndicator extends StatelessWidget {
       NumberFormat.currency(symbol: '', decimalDigits: 1);
 
   _queryLatestWealthAmounts(BuildContext context) {
-    final wealthDatabase = context.watch<WealthDatabase>();
-    final wealthHistoricalAmountDao = wealthDatabase.wealthHistoricalAmountDao;
-    return wealthHistoricalAmountDao.watchLimitWealthHistoricalAmountByWealthId(
-        wealthId, 2);
+    return null;
   }
 
   _buildIndicator(BuildContext context) {
     return StreamBuilder(
       stream: _queryLatestWealthAmounts(context),
-      builder: (BuildContext context,
-          AsyncSnapshot<List<WealthHistoricalAmount>> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List<Wealth>> snapshot) {
         double changedAmount = 0.0;
 
-        if (snapshot.hasData) {
-          final historicalAmounts = snapshot.data;
-          if (historicalAmounts.length == 2) {
-            changedAmount =
-                historicalAmounts[0].amount - historicalAmounts[1].amount;
-          }
-        }
+        // if (snapshot.hasData) {
+        //   final historicalAmounts = snapshot.data;
+        //   if (historicalAmounts.length == 2) {
+        //     changedAmount =
+        //         historicalAmounts[0].amount - historicalAmounts[1].amount;
+        //   }
+        // }
 
         var iconData = changedAmount >= 0
             ? FontAwesomeIcons.levelUpAlt

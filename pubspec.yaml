@@ -44,12 +44,14 @@ dependencies:
 
   # Formatting support libs
   intl: ^0.16.1
+  date_format: ^1.0.9
 
   # Persistent
   moor_flutter: ^3.1.0
 
   # Common libs
   uuid: ^2.2.2
+  json_annotation: ^3.1.1
 
 
 dev_dependencies:
@@ -59,6 +61,7 @@ dev_dependencies:
   # Persistent support libs
   moor_generator: ^3.4.0
   build_runner: ^1.10.11
+  json_serializable: ^3.5.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

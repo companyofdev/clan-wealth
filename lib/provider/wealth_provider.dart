@@ -1,7 +1,6 @@
 import 'package:clan_wealth/model/wealth.dart';
 import 'package:clan_wealth/service/auth_service.dart';
 import 'package:clan_wealth/service/wealth_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -58,7 +57,7 @@ class WealthProvider with ChangeNotifier {
         title: _title,
         description: _description,
         category: _category,
-        updatedDate: Timestamp.now());
+        updatedDate: DateTime.now());
     _wealthService.upsert(editingWealth);
   }
 

@@ -3,7 +3,6 @@ import 'package:clan_wealth/service/auth_service.dart';
 import 'package:clan_wealth/service/wealth_service.dart';
 import 'package:clan_wealth/ui/page/login_page.dart';
 import 'package:clan_wealth/ui/page/master_page.dart';
-import 'package:clan_wealth/persistent/wealth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +25,6 @@ class MyApp extends StatelessWidget {
     ]);
     return MultiProvider(
       providers: [
-        Provider<WealthDatabase>(create: (_) => WealthDatabase()),
         Provider<AuthService>(
           create: (_) => AuthService.instance,
         ),

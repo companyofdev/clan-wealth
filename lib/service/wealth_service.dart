@@ -39,7 +39,7 @@ class WealthService {
     return _fireStore
         .collection(kWealthCollectionName)
         .doc(wealth.id)
-        .set(wealth.toMap(), options);
+        .set(wealth.toJson(), options);
   }
 
   // Delete
