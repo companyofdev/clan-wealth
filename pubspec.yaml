@@ -52,6 +52,7 @@ dependencies:
   # Common libs
   uuid: ^2.2.2
   json_annotation: ^3.1.1
+  jiffy: ^3.0.1
 
 
 dev_dependencies:
