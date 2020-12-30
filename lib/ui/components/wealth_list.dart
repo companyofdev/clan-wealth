@@ -26,11 +26,7 @@ class WealthList extends StatelessWidget {
           return _buildListView(_wealths, context, _wealthProvider);
         }
         if (snapshot.hasError) {
-          return Center(
-            child: Text(
-              snapshot.error.toString(),
-            ),
-          );
+          print(snapshot.error.toString());
         }
         return Center(
           child: Loading(size: 100.0),
