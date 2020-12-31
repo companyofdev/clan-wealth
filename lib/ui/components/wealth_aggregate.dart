@@ -68,6 +68,9 @@ class WealthAggregate extends StatelessWidget {
   }
 
   num _lastMonthBalance(List<Wealth> _wealths, String _lastMonth) {
+    if (_wealths == null || _wealths.length == 0) {
+      return 0.0;
+    }
     return _wealths.map((wealth) {
       return wealth.monthlyBalance[_lastMonth] != null
           ? wealth.monthlyBalance[_lastMonth].balance
@@ -76,6 +79,9 @@ class WealthAggregate extends StatelessWidget {
   }
 
   double _currentBalance(List<Wealth> _wealths, String _currentMonth) {
+    if (_wealths == null || _wealths.length == 0) {
+      return 0.0;
+    }
     return _wealths
         .map((wealth) => wealth.monthlyBalance[_currentMonth]?.balance)
         .reduce((total, element) => total + element);
