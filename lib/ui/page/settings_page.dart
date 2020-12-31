@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final _authUser = Provider.of<AuthService>(context).currentUser();
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
@@ -28,12 +29,14 @@ class SettingsPage extends StatelessWidget {
               child: ListTile(
                 contentPadding: EdgeInsets.all(10.0),
                 title: Text(
-                  'Thanh',
+                  _authUser.displayName ?? _authUser.email,
                   style: TextStyle(fontWeight: FontWeight.w500),
                 ),
                 leading: CircleAvatar(
                   backgroundColor: Colors.white,
-                  child: Icon(FontAwesomeIcons.userTie),
+                  backgroundImage: _authUser.photoURL != null
+                      ? NetworkImage(_authUser.photoURL)
+                      : AssetImage('images/anonymous.png'),
                 ),
                 trailing: Icon(Icons.edit),
               ),
@@ -49,22 +52,16 @@ class SettingsPage extends StatelessWidget {
                   ListTile(
                     contentPadding: EdgeInsets.all(10.0),
                     title: Text(
-                      'Change Language',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                    leading: Icon(FontAwesomeIcons.language),
-                    trailing: Icon(Icons.keyboard_arrow_right),
-                  ),
-                  _buildDivider(),
-                  ListTile(
-                    contentPadding: EdgeInsets.all(10.0),
-                    title: Text(
                       'Change Password',
                       style: TextStyle(fontWeight: FontWeight.w500),
                     ),
                     leading: Icon(Icons.lock_open_outlined),
                     trailing: Icon(Icons.keyboard_arrow_right),
+                    onTap: () {
+                      navigatePushToForgotPassword(context);
+                    },
                   ),
+                  _buildDivider(),
                   ListTile(
                     contentPadding: EdgeInsets.all(10.0),
                     title: Text(
