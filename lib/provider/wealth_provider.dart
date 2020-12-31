@@ -8,10 +8,11 @@ class WealthProvider with ChangeNotifier {
   final WealthService _wealthService = WealthService.instance;
   final AuthService _authService = AuthService.instance;
   String _id;
-  String _ownerId;
   String _title;
   String _description;
   String _category;
+  List<Holder> _holderDetails;
+  List<String> _uids;
   var uuid = Uuid();
 
   String get title => _title;
@@ -37,27 +38,32 @@ class WealthProvider with ChangeNotifier {
   load(Wealth _wealth) {
     if (_wealth == null) {
       _id = null;
-      _ownerId = _authService.currentUser().uid;
       _title = null;
       _description = null;
       _category = null;
+      _holderDetails = null;
+      _uids = null;
     } else {
       _id = _wealth.id;
-      _ownerId = _wealth.ownerId;
       _title = _wealth.title;
       _description = _wealth.description;
       _category = _wealth.category;
+      _holderDetails = _wealth.holderDetails;
+      _uids = _wealth.uids;
     }
   }
 
   save() {
     var editingWealth = Wealth(
-        id: _id ?? uuid.v4(),
-        ownerId: _ownerId ?? _authService.currentUser().uid,
-        title: _title,
-        description: _description,
-        category: _category,
-        updatedDate: DateTime.now());
+      id: _id ?? uuid.v4(),
+      title: _title,
+      description: _description,
+      category: _category,
+      updatedDate: DateTime.now(),
+      holderDetails: _holderDetails ??
+          [Holder(uid: _authService.currentUser().uid, role: HolderRole.Owner)],
+      uids: _uids ?? [_authService.currentUser().uid],
+    );
     _wealthService.upsert(editingWealth);
   }
 

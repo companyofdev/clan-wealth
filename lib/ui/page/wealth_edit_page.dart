@@ -204,7 +204,6 @@ class _WealthEditPageState extends State<WealthEditPage> {
       title: _title,
       description: _description,
       category: _category.name,
-      ownerId: _authUser.uid,
       updatedDate: _updatedDate,
     );
     context.read<WealthService>().upsert(_wealth);

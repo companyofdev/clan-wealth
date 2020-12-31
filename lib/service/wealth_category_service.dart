@@ -27,6 +27,14 @@ class WealthCategoryService {
         iconData: FontAwesomeIcons.home, name: 'stock', description: 'Stock'),
   ];
   static List<WealthCategory> get getAllCategories => _categories;
+
+  static WealthCategory getCategoryByName(String name,
+      {WealthCategory defaultCategory}) {
+    defaultCategory ??= WealthCategory(
+        name: '', description: '', iconData: FontAwesomeIcons.dollarSign);
+    return _categories.firstWhere((cat) => cat.name == name,
+        orElse: () => defaultCategory);
+  }
 }
 
 @immutable

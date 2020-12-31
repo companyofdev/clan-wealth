@@ -7,10 +7,11 @@ part 'wealth.g.dart';
 @JsonSerializable()
 class Wealth {
   final String id;
-  final String ownerId;
   final String title;
   final String description;
   final String category;
+  final List<Holder> holderDetails;
+  final List<String> uids;
 
   @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeAsIs)
   final DateTime updatedDate;
@@ -18,12 +19,13 @@ class Wealth {
 
   Wealth({
     @required this.id,
-    @required this.ownerId,
     @required this.title,
     this.description,
     @required this.category,
     @required this.updatedDate,
     this.monthlyBalance,
+    this.holderDetails,
+    this.uids,
   });
 
   factory Wealth.fromJson(Map<String, dynamic> json) => _$WealthFromJson(json);
@@ -46,6 +48,28 @@ class MonthlyBalance {
   factory MonthlyBalance.fromJson(Map<String, dynamic> json) =>
       _$MonthlyBalanceFromJson(json);
   Map<String, dynamic> toJson() => _$MonthlyBalanceToJson(this);
+}
+
+enum HolderRole { Owner, Editor, Viewer }
+
+@JsonSerializable()
+class Holder {
+  final String uid;
+  final String displayName;
+  final String photoURL;
+  final HolderRole role;
+  final double sharePercent;
+
+  Holder({
+    @required this.uid,
+    this.displayName,
+    this.photoURL,
+    @required this.role,
+    this.sharePercent,
+  });
+
+  factory Holder.fromJson(Map<String, dynamic> json) => _$HolderFromJson(json);
+  Map<String, dynamic> toJson() => _$HolderToJson(this);
 }
 
 @JsonSerializable(includeIfNull: false)

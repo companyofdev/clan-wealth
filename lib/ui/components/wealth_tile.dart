@@ -1,4 +1,5 @@
 import 'package:clan_wealth/model/wealth.dart';
+import 'package:clan_wealth/service/wealth_category_service.dart';
 import 'package:clan_wealth/ui/common_number_format.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -31,14 +32,24 @@ class WealthTile extends StatelessWidget {
           ),
         ),
         child: Icon(
-          FontAwesomeIcons.landmark,
+          WealthCategoryService.getCategoryByName(wealth.category).iconData,
           color: Colors.white,
           size: 30.0,
         ),
       ),
-      title: Text(
-        wealth.title,
-        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      title: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              wealth.title,
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+            _buildAvatars(wealth),
+          ],
+        ),
       ),
       subtitle: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -53,6 +64,19 @@ class WealthTile extends StatelessWidget {
         onPressed: onDetailPressed,
       ),
       onTap: onTap,
+    );
+  }
+
+  Row _buildAvatars(Wealth wealth) {
+    final holders = wealth.holderDetails ?? List.empty();
+    return Row(
+      children: holders
+          .map((holder) => CircleAvatar(
+                radius: 15.0,
+                backgroundColor: Colors.white,
+                backgroundImage: NetworkImage(holder.photoURL),
+              ))
+          .toList(),
     );
   }
 
