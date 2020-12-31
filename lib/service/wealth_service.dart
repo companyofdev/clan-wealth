@@ -20,9 +20,10 @@ class WealthService {
   // Get
   Stream<List<Wealth>> watchAll({String owner}) {
     var _ownerId = owner ?? _authService.currentUser().uid;
+    print(_ownerId);
     return _fireStore
         .collection(kWealthCollectionName)
-        .where('ownerId', isEqualTo: _ownerId)
+        .where('uids', arrayContains: _ownerId)
         .snapshots()
         .map(
           (snapshot) => snapshot.docs

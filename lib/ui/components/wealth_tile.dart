@@ -74,7 +74,9 @@ class WealthTile extends StatelessWidget {
           .map((holder) => CircleAvatar(
                 radius: 15.0,
                 backgroundColor: Colors.white,
-                backgroundImage: NetworkImage(holder.photoURL),
+                backgroundImage: holder.photoURL != null
+                    ? NetworkImage(holder.photoURL)
+                    : AssetImage('images/anonymous.png'),
               ))
           .toList(),
     );
