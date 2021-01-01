@@ -1,3 +1,4 @@
+import 'package:clan_wealth/model/model_helper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -13,10 +14,12 @@ class Wealth {
   final List<Holder> holderDetails;
   final List<String> uids;
 
-  @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeAsIs)
+  @JsonKey(
+      fromJson: ModelHelper.dateTimeFromTimestamp,
+      toJson: ModelHelper.dateTimeAsIs)
   final DateTime updatedDate;
   final Balance currentBalance;
-  final Balance lastMonthBalance;
+  final List<Balance> previousBalances;
 
   Wealth({
     @required this.id,
@@ -25,31 +28,13 @@ class Wealth {
     @required this.category,
     @required this.updatedDate,
     @required this.currentBalance,
-    this.lastMonthBalance,
+    this.previousBalances,
     this.holderDetails,
     this.uids,
   });
 
   factory Wealth.fromJson(Map<String, dynamic> json) => _$WealthFromJson(json);
   Map<String, dynamic> toJson() => _$WealthToJson(this);
-
-  static DateTime _dateTimeAsIs(DateTime dateTime) => dateTime;
-
-  static DateTime _dateTimeFromTimestamp(Timestamp timestamp) {
-    return DateTime.parse(timestamp.toDate().toString());
-  }
-}
-
-@JsonSerializable(includeIfNull: false)
-class MonthlyBalance {
-  final String month;
-  final Balance balance;
-
-  MonthlyBalance({this.month, this.balance});
-
-  factory MonthlyBalance.fromJson(Map<String, dynamic> json) =>
-      _$MonthlyBalanceFromJson(json);
-  Map<String, dynamic> toJson() => _$MonthlyBalanceToJson(this);
 }
 
 enum HolderRole { Owner, Editor, Viewer }
@@ -82,6 +67,11 @@ class Balance {
   final double boughtFee;
   final double maintainingFee;
   final double upgradingFee;
+  @JsonKey(
+      fromJson: ModelHelper.dateTimeFromTimestamp,
+      toJson: ModelHelper.dateTimeAsIs)
+  final DateTime updatedDate;
+  final String uid;
 
   const Balance({
     @required this.balance,
@@ -90,6 +80,8 @@ class Balance {
     this.boughtFee,
     this.maintainingFee,
     this.upgradingFee,
+    this.updatedDate,
+    this.uid,
   });
 
   factory Balance.fromJson(Map<String, dynamic> json) =>

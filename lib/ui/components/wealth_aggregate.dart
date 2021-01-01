@@ -4,7 +4,6 @@ import 'package:clan_wealth/ui/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:loading/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -69,21 +68,17 @@ class WealthAggregate extends StatelessWidget {
     if (_wealths == null || _wealths.length == 0) {
       return 0.0;
     }
-    return _wealths.map((wealth) {
-      return wealth.lastMonthBalance != null
-          ? wealth.lastMonthBalance.balance
-          : 0.0;
-    }).reduce((total, element) => total + element);
+    return _wealths
+        .map((wealth) => wealth.previousBalances?.first?.balance ?? 0.0)
+        .reduce((total, element) => total + element);
   }
 
   double _currentTotalBalance(List<Wealth> _wealths) {
     if (_wealths == null || _wealths.length == 0) {
       return 0.0;
     }
-    return _wealths.map((wealth) {
-      return wealth.currentBalance != null
-          ? wealth.currentBalance.balance
-          : 0.0;
-    }).reduce((total, element) => total + element);
+    return _wealths
+        .map((wealth) => wealth.currentBalance?.balance ?? 0)
+        .reduce((total, element) => total + element);
   }
 }

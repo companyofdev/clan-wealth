@@ -80,14 +80,13 @@ class WealthTile extends StatelessWidget {
   }
 
   _buildChangedBalance() {
-    final currentBalance =
-        wealth.currentBalance != null ? wealth.currentBalance.balance : 0.0;
-    final lastMonthBalance =
-        wealth.lastMonthBalance != null ? wealth.lastMonthBalance.balance : 0.0;
+    final currentBalance = wealth.currentBalance?.balance ?? 0.0;
+    final previousLatestBalance =
+        wealth.previousBalances?.first?.balance ?? 0.0;
 
     return Row(
       children: [
-        Text(changedBalanceText(currentBalance, lastMonthBalance,
+        Text(changedBalanceText(currentBalance, previousLatestBalance,
             noChangeText: '--')),
       ],
     );

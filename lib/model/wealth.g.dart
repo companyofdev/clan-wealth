@@ -13,13 +13,14 @@ Wealth _$WealthFromJson(Map<String, dynamic> json) {
     description: json['description'] as String,
     category: json['category'] as String,
     updatedDate:
-        Wealth._dateTimeFromTimestamp(json['updatedDate'] as Timestamp),
+        ModelHelper.dateTimeFromTimestamp(json['updatedDate'] as Timestamp),
     currentBalance: json['currentBalance'] == null
         ? null
         : Balance.fromJson(json['currentBalance'] as Map<String, dynamic>),
-    lastMonthBalance: json['lastMonthBalance'] == null
-        ? null
-        : Balance.fromJson(json['lastMonthBalance'] as Map<String, dynamic>),
+    previousBalances: (json['previousBalances'] as List)
+        ?.map((e) =>
+            e == null ? null : Balance.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
     holderDetails: (json['holderDetails'] as List)
         ?.map((e) =>
             e == null ? null : Holder.fromJson(e as Map<String, dynamic>))
@@ -35,33 +36,10 @@ Map<String, dynamic> _$WealthToJson(Wealth instance) => <String, dynamic>{
       'category': instance.category,
       'holderDetails': instance.holderDetails,
       'uids': instance.uids,
-      'updatedDate': Wealth._dateTimeAsIs(instance.updatedDate),
+      'updatedDate': ModelHelper.dateTimeAsIs(instance.updatedDate),
       'currentBalance': instance.currentBalance,
-      'lastMonthBalance': instance.lastMonthBalance,
+      'previousBalances': instance.previousBalances,
     };
-
-MonthlyBalance _$MonthlyBalanceFromJson(Map<String, dynamic> json) {
-  return MonthlyBalance(
-    month: json['month'] as String,
-    balance: json['balance'] == null
-        ? null
-        : Balance.fromJson(json['balance'] as Map<String, dynamic>),
-  );
-}
-
-Map<String, dynamic> _$MonthlyBalanceToJson(MonthlyBalance instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('month', instance.month);
-  writeNotNull('balance', instance.balance);
-  return val;
-}
 
 Holder _$HolderFromJson(Map<String, dynamic> json) {
   return Holder(
@@ -127,6 +105,9 @@ Balance _$BalanceFromJson(Map<String, dynamic> json) {
     boughtFee: (json['boughtFee'] as num)?.toDouble(),
     maintainingFee: (json['maintainingFee'] as num)?.toDouble(),
     upgradingFee: (json['upgradingFee'] as num)?.toDouble(),
+    updatedDate:
+        ModelHelper.dateTimeFromTimestamp(json['updatedDate'] as Timestamp),
+    uid: json['uid'] as String,
   );
 }
 
@@ -145,5 +126,7 @@ Map<String, dynamic> _$BalanceToJson(Balance instance) {
   writeNotNull('boughtFee', instance.boughtFee);
   writeNotNull('maintainingFee', instance.maintainingFee);
   writeNotNull('upgradingFee', instance.upgradingFee);
+  writeNotNull('updatedDate', ModelHelper.dateTimeAsIs(instance.updatedDate));
+  writeNotNull('uid', instance.uid);
   return val;
 }
