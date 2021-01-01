@@ -15,7 +15,8 @@ class Wealth {
 
   @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeAsIs)
   final DateTime updatedDate;
-  final Map<String, Balance> monthlyBalance;
+  final Balance currentBalance;
+  final Balance lastMonthBalance;
 
   Wealth({
     @required this.id,
@@ -23,7 +24,8 @@ class Wealth {
     this.description,
     @required this.category,
     @required this.updatedDate,
-    this.monthlyBalance,
+    @required this.currentBalance,
+    this.lastMonthBalance,
     this.holderDetails,
     this.uids,
   });

@@ -1,6 +1,6 @@
 import 'package:clan_wealth/model/wealth.dart';
 import 'package:clan_wealth/provider/wealth_provider.dart';
-import 'package:clan_wealth/ui/common_number_format.dart';
+import 'package:clan_wealth/ui/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -13,8 +13,6 @@ class WealthAggregate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String _currentMonth = Jiffy().format('yyyyMM');
-    final String _lastMonth = (Jiffy()..subtract(months: 1)).format('yyyyMM');
     final _wealthStream = Provider.of<WealthProvider>(context).wealths;
     return StreamBuilder(
       stream: _wealthStream,
@@ -24,8 +22,8 @@ class WealthAggregate extends StatelessWidget {
         }
 
         final _wealths = snapshot.data;
-        final currentBalance = _currentBalance(_wealths, _currentMonth);
-        final lastMonthBalance = _lastMonthBalance(_wealths, _lastMonth);
+        final currentTotalBalance = _currentTotalBalance(_wealths);
+        final lastMonthTotalBalance = _lastMonthTotalBalance(_wealths);
 
         return Column(
           children: [
@@ -37,7 +35,7 @@ class WealthAggregate extends StatelessWidget {
                   width: 2.0,
                 ),
                 Text(
-                  _numberFormat.format(currentBalance),
+                  _numberFormat.format(currentTotalBalance),
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 45.0,
@@ -52,7 +50,7 @@ class WealthAggregate extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  changedBalanceText(currentBalance, lastMonthBalance,
+                  changedBalanceText(currentTotalBalance, lastMonthTotalBalance,
                       noChangeText: '--'),
                   style: TextStyle(
                       color: Colors.white,
@@ -67,23 +65,25 @@ class WealthAggregate extends StatelessWidget {
     );
   }
 
-  num _lastMonthBalance(List<Wealth> _wealths, String _lastMonth) {
+  num _lastMonthTotalBalance(List<Wealth> _wealths) {
     if (_wealths == null || _wealths.length == 0) {
       return 0.0;
     }
     return _wealths.map((wealth) {
-      return wealth.monthlyBalance[_lastMonth] != null
-          ? wealth.monthlyBalance[_lastMonth].balance
-          : 0;
+      return wealth.lastMonthBalance != null
+          ? wealth.lastMonthBalance.balance
+          : 0.0;
     }).reduce((total, element) => total + element);
   }
 
-  double _currentBalance(List<Wealth> _wealths, String _currentMonth) {
+  double _currentTotalBalance(List<Wealth> _wealths) {
     if (_wealths == null || _wealths.length == 0) {
       return 0.0;
     }
-    return _wealths
-        .map((wealth) => wealth.monthlyBalance[_currentMonth]?.balance)
-        .reduce((total, element) => total + element);
+    return _wealths.map((wealth) {
+      return wealth.currentBalance != null
+          ? wealth.currentBalance.balance
+          : 0.0;
+    }).reduce((total, element) => total + element);
   }
 }

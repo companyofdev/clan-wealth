@@ -1,10 +1,9 @@
 import 'package:clan_wealth/model/wealth.dart';
 import 'package:clan_wealth/service/wealth_category_service.dart';
-import 'package:clan_wealth/ui/common_number_format.dart';
+import 'package:clan_wealth/ui/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:jiffy/jiffy.dart';
 
 class WealthTile extends StatelessWidget {
   final Wealth wealth;
@@ -14,8 +13,6 @@ class WealthTile extends StatelessWidget {
   WealthTile({this.wealth, this.onTap, this.onDetailPressed});
 
   final NumberFormat _numberFormat = NumberFormat('#,###.0#', 'en_US');
-  final String _currentMonth = Jiffy().format('yyyyMM');
-  final String _lastMonth = (Jiffy()..subtract(months: 1)).format('yyyyMM');
 
   @override
   Widget build(BuildContext context) {
@@ -83,10 +80,10 @@ class WealthTile extends StatelessWidget {
   }
 
   _buildChangedBalance() {
-    final currentBalance = wealth.monthlyBalance[_currentMonth].balance;
-    final lastMonthBalance = wealth.monthlyBalance[_lastMonth] != null
-        ? wealth.monthlyBalance[_lastMonth].balance
-        : 0.0;
+    final currentBalance =
+        wealth.currentBalance != null ? wealth.currentBalance.balance : 0.0;
+    final lastMonthBalance =
+        wealth.lastMonthBalance != null ? wealth.lastMonthBalance.balance : 0.0;
 
     return Row(
       children: [
@@ -101,7 +98,10 @@ class WealthTile extends StatelessWidget {
       children: [
         Icon(FontAwesomeIcons.dollarSign, size: 14.0),
         Text(
-            _numberFormat.format(wealth.monthlyBalance[_currentMonth].balance)),
+          _numberFormat.format(wealth.currentBalance != null
+              ? wealth.currentBalance.balance
+              : 0.0),
+        ),
       ],
     );
   }

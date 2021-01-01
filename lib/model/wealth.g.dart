@@ -14,10 +14,12 @@ Wealth _$WealthFromJson(Map<String, dynamic> json) {
     category: json['category'] as String,
     updatedDate:
         Wealth._dateTimeFromTimestamp(json['updatedDate'] as Timestamp),
-    monthlyBalance: (json['monthlyBalance'] as Map<String, dynamic>)?.map(
-      (k, e) => MapEntry(
-          k, e == null ? null : Balance.fromJson(e as Map<String, dynamic>)),
-    ),
+    currentBalance: json['currentBalance'] == null
+        ? null
+        : Balance.fromJson(json['currentBalance'] as Map<String, dynamic>),
+    lastMonthBalance: json['lastMonthBalance'] == null
+        ? null
+        : Balance.fromJson(json['lastMonthBalance'] as Map<String, dynamic>),
     holderDetails: (json['holderDetails'] as List)
         ?.map((e) =>
             e == null ? null : Holder.fromJson(e as Map<String, dynamic>))
@@ -34,7 +36,8 @@ Map<String, dynamic> _$WealthToJson(Wealth instance) => <String, dynamic>{
       'holderDetails': instance.holderDetails,
       'uids': instance.uids,
       'updatedDate': Wealth._dateTimeAsIs(instance.updatedDate),
-      'monthlyBalance': instance.monthlyBalance,
+      'currentBalance': instance.currentBalance,
+      'lastMonthBalance': instance.lastMonthBalance,
     };
 
 MonthlyBalance _$MonthlyBalanceFromJson(Map<String, dynamic> json) {

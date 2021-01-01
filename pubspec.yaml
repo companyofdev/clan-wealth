@@ -36,11 +36,11 @@ dependencies:
   rflutter_alert: ^1.1.0
   flutter_easyloading: ^2.2.1
   flutter_slidable: ^0.5.7
-  flutter_iconpicker: ^2.2.2
   form_field_validator: ^1.0.1
   cupertino_icons: ^1.0.0
   font_awesome_flutter: ^8.11.0
   loading: ^1.0.2
+  fl_chart: ^0.12.2
 
   # Formatting support libs
   intl: ^0.16.1
