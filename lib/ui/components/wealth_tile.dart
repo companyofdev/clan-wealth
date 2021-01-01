@@ -1,9 +1,11 @@
+import 'package:clan_wealth/model/model_helper.dart';
 import 'package:clan_wealth/model/wealth.dart';
 import 'package:clan_wealth/service/wealth_category_service.dart';
 import 'package:clan_wealth/ui/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:jiffy/jiffy.dart';
 
 class WealthTile extends StatelessWidget {
   final Wealth wealth;
@@ -81,12 +83,11 @@ class WealthTile extends StatelessWidget {
 
   _buildChangedBalance() {
     final currentBalance = wealth.currentBalance?.balance ?? 0.0;
-    final previousLatestBalance =
-        wealth.previousBalances?.first?.balance ?? 0.0;
+    final previousMonthBalance = ModelHelper.getPreviousMonthBalance(wealth);
 
     return Row(
       children: [
-        Text(changedBalanceText(currentBalance, previousLatestBalance,
+        Text(changedBalanceText(currentBalance, previousMonthBalance,
             noChangeText: '--')),
       ],
     );

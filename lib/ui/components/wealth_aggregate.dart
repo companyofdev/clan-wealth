@@ -1,3 +1,4 @@
+import 'package:clan_wealth/model/model_helper.dart';
 import 'package:clan_wealth/model/wealth.dart';
 import 'package:clan_wealth/provider/wealth_provider.dart';
 import 'package:clan_wealth/ui/helpers.dart';
@@ -69,7 +70,7 @@ class WealthAggregate extends StatelessWidget {
       return 0.0;
     }
     return _wealths
-        .map((wealth) => wealth.previousBalances?.first?.balance ?? 0.0)
+        .map((wealth) => ModelHelper.getPreviousMonthBalance(wealth))
         .reduce((total, element) => total + element);
   }
 
